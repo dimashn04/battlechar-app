@@ -1,6 +1,33 @@
-<h1>Testing</h1>
+<!-- Table from https://www.w3schools.com/tags/tryit.asp?filename=tryhtml_th -->
+<style>
+table, th, td {
+    border: 1px solid black;
+}
+</style>
 
-<h5>Name: </h5>
-<p>{{ name }}<p>
-<h5>Class: </h5>
-<p>{{ class }}<p>
+<h1>BattleChar</h1>
+
+<table>
+    <tr>
+        <th>Name</th>
+        <th>Unit</th>
+        <th>Primary weapon</th>
+        <th>Secondary weapon</th>
+        <th>Ammo</th>
+        <th>Armor</th>
+        <th>Speed</th>
+        <th>Description</th>
+        <th>Price</th>
+    </tr>
+    <tr>
+        <td><center>{{ name }}</center></td>
+        <td><center>{{ unit }}</center></td>
+        <td><center>{{ primary_weapon }}</center></td>
+        <td><center>{{ secondary_weapon }}</center></td>
+        <td><center>{{ ammo_amount }}</center></td>
+        <td><center>{{ armor }}</center></td>
+        <td><center>{{ speed }}</center></td>
+        <td>{{ operator_description }}</td>
+        <td><center>{{ price }}</center></td>
+    </tr>
+</table>
