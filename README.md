@@ -1,4 +1,5 @@
-BattleChar-App<br>
-Dimas Herjunodarpito Notoprayitno<br>
-2206081282<br>
+# PBP Tugas 01
+BattleChar-App
+Dimas Herjunodarpito Notoprayitno
+2206081282
 PBP C
