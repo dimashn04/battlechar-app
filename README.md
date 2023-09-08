@@ -20,7 +20,6 @@ Checklist untuk tugas ini adalah sebagai berikut (Asumsi penilai memakai Debian 
         ALLOWED_HOSTS = [*]
         ...
         ```
-        <br>
     - Menguji apakah proyek telah berhasil dibuat dengan ```./manage.py runserver``` <br>
 - [x] Membuat aplikasi dengan nama ```main``` pada proyek tersebut. <br>
 - [x] Melakukan routing pada proyek agar dapat menjalankan aplikasi ```main```. <br>
