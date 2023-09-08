@@ -169,7 +169,7 @@ Checklist untuk tugas ini adalah sebagai berikut (Asumsi penilai memakai Debian 
 - [x] Membuat sebuah ```README.md``` yang berisi tautan menuju aplikasi Adaptable yang sudah di-deploy, serta jawaban dari beberapa pertanyaan berikut. <br>
     - Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step (bukan hanya sekadar mengikuti tutorial). <br>
     Jawab: <br>
-    Sudah dijelaskan secara rinci di atas. <br>
+    Sudah dijelaskan secara rinci di atas. <br><br>
     **BONUS** <br>
     Saya menambahkan unit test <br>
         ```python
@@ -220,8 +220,8 @@ Checklist untuk tugas ini adalah sebagai berikut (Asumsi penilai memakai Debian 
                         self.assertContains(response, f'<td>{value}</td>', html=True)
         ```
     - Buatlah bagan yang berisi request client ke web aplikasi berbasis Django beserta responnya dan jelaskan pada bagan tersebut kaitan antara ```urls.py```, ```views.py```, ```models.py```, dan berkas ```html```. <br>
-    Jawab: <br>
-    ![bagan dimas](/doks_md/bagan_dimas.png) <br>
+    **Jawab:** <br>
+    ![bagan dimas](/doks_md/bagan_dimas.png) <br><br>
         1. Klien mengakses situs web dengan membuka browser <br>
         2. Klien mengunjungi situs web, kemudian web server melayani permintaan dari klien <br>
         3. WSGI mengolah server HTTP untuk situs web berbasis Python <br>
@@ -235,23 +235,23 @@ Checklist untuk tugas ini adalah sebagai berikut (Asumsi penilai memakai Debian 
         11. Web server menampilkan respons dari server untuk disampaikan ke klien <br>
         12. Klien mendapatkan respons dari server web <br>
     - Jelaskan mengapa kita menggunakan virtual environment? Apakah kita tetap dapat membuat aplikasi web berbasis Django tanpa menggunakan virtual environment? <br>
-    Jawab: <br>
+    **Jawab:** <br>
     **Pentingnya virtual environment:** <br>
-    Virtual environment dibutuhkan sedemikian rupa sehingga memungkinkan sistem dapat berjalan di lingkungan yang terisolasi dikarenakan setiap proyek memiliki spesifikasi yang berbeda. Dengan menggunakan virtual environment, proyek dapat berjalan menyesuaikan dengan ketergantungannya tanpa mengkonfigurasi sistem operasi yang digunakan. "requirements.txt" berfungsi sebagai catatan daftar ketergantungan dari sebuah proyek yang dijalankan di virtual environment tertentu. Sehingga dengan mengetahui daftar ketergantungan yang dimiliki melalui "requirements.txt" sebuah mesin host, misalnya "Adaptable" dapat mengetahui ketergantungan apa saja yang harus dimanfaatkan agar dapat menjalankan server tersebut. Hal ini juga mempermudah proses penyimpanan dikarenakan pengguna tidak perlu melakukan push pada virtual environment karena sudah tercatat dengan baik di dalam "requirements.txt" (virtual environment adalah sebuah direktori yang cukup menghabiskan penyimpanan repository/host sehingga meniadakannya dengan .gitignore dapat menyederhanakan proyek). <br>
+    Virtual environment dibutuhkan sedemikian rupa sehingga memungkinkan sistem dapat berjalan di lingkungan yang terisolasi dikarenakan setiap proyek memiliki spesifikasi yang berbeda. Dengan menggunakan virtual environment, proyek dapat berjalan menyesuaikan dengan ketergantungannya tanpa mengkonfigurasi sistem operasi yang digunakan. "requirements.txt" berfungsi sebagai catatan daftar ketergantungan dari sebuah proyek yang dijalankan di virtual environment tertentu. Sehingga dengan mengetahui daftar ketergantungan yang dimiliki melalui "requirements.txt" sebuah mesin host, misalnya "Adaptable" dapat mengetahui ketergantungan apa saja yang harus dimanfaatkan agar dapat menjalankan server tersebut. Hal ini juga mempermudah proses penyimpanan dikarenakan pengguna tidak perlu melakukan push pada virtual environment karena sudah tercatat dengan baik di dalam "requirements.txt" (virtual environment adalah sebuah direktori yang cukup menghabiskan penyimpanan repository/host sehingga meniadakannya dengan .gitignore dapat menyederhanakan proyek). <br><br>
     **Apakah kita tetap dapat membuat aplikasi web berbasis Django tanpa menggunakan virtual environment?** <br>
     Apabila hanya dilakukan di lingkungan server lokal maka hal ini dapat dilakukan. Pengguna cukup memanfaatkan lingkungan Python standar komputer (root) untuk mengkonfigurasi ketergantungan yang diperlukan untuk proyek Django sehingga proyek Django dapat dijalankan di server "lokal". Bagaimanapun, apabila ingin menjalankannya di sebuah penyedia layanan online, hal ini menjadi cukup kompleks dikarenakan server host akan mencocokkan daftar ketergantungan yang ada di "requirements.txt" dengan paket ketergantungan yang tersedia di mesin penyedia layanan tersebut. Apabila "requirements.txt" tidak ada dikarenakan lingkungan virtual tidak terinisialisasi, maka mesin host tersebut tidak akan pernah menyadari apa saja ketergantungan yang dibutuhkan untuk menjalankan server sehingga proyek juga akan tidak dapat berjalan. <br>
     - Jelaskan apakah itu MVC, MVT, MVVM dan perbedaan dari ketiganya. <br>
-    Jawab: <br>
+    **Jawab:** <br>
         1. MVC (Model-View-Controller)<br>
             - Model: Mewakili data atau logika bisnis dalam aplikasi. Model ini bertanggung jawab untuk mengelola data dan status aplikasi. <br>
             - View: Bertanggung jawab untuk menampilkan data dari Model ke pengguna dan menerima input pengguna. Ini adalah antarmuka pengguna (UI). <br>
             - Controller: Bertindak sebagai penghubung antara Model dan View. Ini mengatur alur kontrol dan merespons input pengguna. Controller juga memperbarui Model dan View sesuai dengan perubahan yang terjadi. <br>
-            - Perbedaan utama dengan MVT dan MVVM: MVC adalah pola desain yang lebih tua dan lebih sederhana dibandingkan dengan MVT dan MVVM. MVT dan MVVM adalah variasi yang lebih modern dan khusus. <br>
+            - Perbedaan utama dengan MVT dan MVVM: MVC adalah pola desain yang lebih tua dan lebih sederhana dibandingkan dengan MVT dan MVVM. MVT dan MVVM adalah variasi yang lebih modern dan khusus. <br><br>
         2. MVT (Model-View-Template) <br>
             - Model: Sama seperti dalam MVC, ini mengelola data dan logika bisnis. <br>
             - View: Mirip dengan View dalam MVC, menangani tampilan dan presentasi data. <br>
             - Template: Komponen baru dalam MVT. Template ini adalah bagian dari tampilan yang mengatur cara data dari Model ditampilkan dalam View. <br>
-            - Perbedaan utama dengan MVC dan MVVM: MVT adalah variasi dari MVC yang biasanya digunakan dalam kerangka kerja berbasis Python seperti Django. Perbedaannya terletak pada penggunaan Template yang memisahkan logika tampilan lebih jauh. <br>
+            - Perbedaan utama dengan MVC dan MVVM: MVT adalah variasi dari MVC yang biasanya digunakan dalam kerangka kerja berbasis Python seperti Django. Perbedaannya terletak pada penggunaan Template yang memisahkan logika tampilan lebih jauh. <br><br>
         3. MVVM (Model-View-ViewModel) <br>
             - Model: Sama seperti dalam MVC dan MVT, mengelola data dan logika bisnis <br>
             - View: Mirip dengan View dalam pola lainnya, menangani tampilan dan presentasi data <br>
