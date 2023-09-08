@@ -23,7 +23,7 @@ Checklist untuk tugas ini adalah sebagai berikut (Asumsi penilai memakai Debian 
     - Menguji apakah proyek telah berhasil dibuat dengan ```./manage.py runserver``` <br>
     - Membuat ```.gitignore``` yang berisi file yang tidak diperlukan agar tidak memenuhi space <br>
 - [x] Membuat aplikasi dengan nama ```main``` pada proyek tersebut. <br>
-    - 
+    - Membuat aplikasi ```main``` dengan perintah ```python manage.py startapp main``` <br>
 - [x] Melakukan routing pada proyek agar dapat menjalankan aplikasi ```main```. <br>
 - [x] Membuat model pada aplikasi ```main``` dengan nama ```Item``` dan memiliki atribut wajib sebagai berikut. <br>
     - ```name``` sebagai nama item dengan tipe ```CharField```. <br>
