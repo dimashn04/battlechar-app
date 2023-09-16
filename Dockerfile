@@ -5,7 +5,7 @@ WORKDIR /app
 ENV PYTHONUNBUFFERED=1 \
     PYTHONPATH=/app \
     DJANGO_SETTINGS_MODULE=battlechar.settings \
-    PORT=8001 \
+    PORT=8000 \
     WEB_CONCURRENCY=2
 
 # Install system packages required Django.
