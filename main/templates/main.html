@@ -1,38 +1,60 @@
 <!-- Table from https://www.w3schools.com/tags/tryit.asp?filename=tryhtml_th -->
+{% extends 'base.html' %}
+
+{% block content %}
 <style>
-table, th, td {
-    border: 1px solid black;
-}
+    table, th, td {
+        border: 1px solid black;
+    }
 </style>
 
 <h1>BattleChar</h1>
 
 <h5>Name: </h5>
-<p>Dimas Herjunodarpito N</p> <!-- Ubahlah sesuai dengan nama kamu -->
+<p>{{ creator }}</p> <!-- Ubahlah sesuai dengan nama kamu -->
+<h5>Student ID: </h5>
+<p>{{ student_id }}</p>
 <h5>Class: </h5>
-<p>PBP C</p> <!-- Ubahlah sesuai dengan kelas kamu -->
+<p>{{ class }}</p> <!-- Ubahlah sesuai dengan kelas kamu -->
 
+<br />
+<h3>{{ roster_size }}</h3>
 <table>
     <tr>
         <th>Name</th>
         <th>Unit</th>
         <th>Primary weapon</th>
         <th>Secondary weapon</th>
-        <th>Ammo</th>
+        <th>Primary weapon ammo</th>
+        <th>Secondary weapon ammo</th>
         <th>Armor</th>
         <th>Speed</th>
         <th>Description</th>
         <th>Price</th>
     </tr>
-    <tr>
-        <td><center>{{ name }}</center></td>
-        <td><center>{{ unit }}</center></td>
-        <td><center>{{ primary_weapon }}</center></td>
-        <td><center>{{ secondary_weapon }}</center></td>
-        <td><center>{{ amount }}</center></td>
-        <td><center>{{ armor }}</center></td>
-        <td><center>{{ speed }}</center></td>
-        <td>{{ description }}</td>
-        <td><center>{{ price }}</center></td>
-    </tr>
+
+    {% for operator in operators %}
+        <tr>
+            <td><center>{{ operator.name }}</center></td>
+            <td><center>{{ operator.unit }}</center></td>
+            <td><center>{{ operator.primary_weapon }}</center></td>
+            <td><center>{{ operator.secondary_weapon }}</center></td>
+            <td><center>{{ operator.primary_weapon_ammo_amount }}</center></td>
+            <td><center>{{ operator.secondary_weapon_ammo_amount }}</center></td>
+            <td><center>{{ operator.armor }}</center></td>
+            <td><center>{{ operator.speed }}</center></td>
+            <td>{{ operator.description }}</td>
+            <td><center>{{ operator.price }}</center></td>
+        </tr>
+    {% endfor %}
 </table>
+
+<br />
+
+<a href="{% url 'main:create_operator' %}">
+    <button>
+        Add New Operator
+    </button>
+</a>
+
+{% endblock content %}

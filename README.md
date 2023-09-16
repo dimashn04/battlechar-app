@@ -1,10 +1,11 @@
-# PBP Tugas 02
+# PBP Tugas
 **BattleChar-App**<br>
 **Link:** https://battlechar.adaptable.app/main/ <br>
 Dimas Herjunodarpito Notoprayitno<br>
 2206081282<br>
 PBP C<br>
 
+# PBP Tugas 2
 ## Checklist Tugas
 Checklist untuk tugas ini adalah sebagai berikut (Asumsi penilai memakai Debian linux, karena saya memakainya).<br>
 - [x] Membuat sebuah proyek Django baru. <br>
@@ -258,3 +259,266 @@ Checklist untuk tugas ini adalah sebagai berikut (Asumsi penilai memakai Debian 
             - View: Mirip dengan View dalam pola lainnya, menangani tampilan dan presentasi data <br>
             - ViewModel: Komponen baru dalam MVVM. ViewModel berperan sebagai perantara antara Model dan View. Ini mengonversi data dari Model ke format yang sesuai untuk tampilan dan menerima perubahan dari View untuk diteruskan ke Model. <br>
             - Perbedaan utama dengan MVC dan MVT: MVVM menambahkan lapisan ViewModel untuk memisahkan lebih jauh logika tampilan dari Model, membuatnya lebih cocok untuk pengembangan aplikasi berbasis tampilan yang dinamis. <br>
+
+# PBP Tugas 3
+## Checklist Tugas
+Checklist untuk tugas ini adalah sebagai berikut: <br>
+- [x] Membuat input ```form``` untuk menambahkan objek model pada app sebelumnya. <br>
+    - Melakukan routing ```main/``` ke ```/``` agar langsung masuk ke halaman utama tanpa peringatan ```404 error``` jika tidak ditambahkan ```main/``` pada URL secara manual. <br>
+        - Memodifikasi ```urls.py``` pada folder ```battlechar``` dengan mengubah path ```main/``` menjadi ```""``` pada list ```urlpatterns``` seperti berikut. <br>
+            ```python
+            urlpatterns = [
+                path('admin/', admin.site.urls),
+                path('', include('main.urls')),
+            ]
+            ```
+    - Membuat kerangka ```views``` dengan menggunakan ```skeleton```. Hal ini bermanfaat agar desain situs web memiliki konsistensi dan memperkecil peluang terjadinya redundansi kode. <br>
+        - Membuat folder ```templates``` pada folder root dan membuat sebuah file HTML dengan nama ```base.html```. File HTML tersebut berfungsi sebagai template dasar yang dapat digunakan sebagai kerangka secara general untuk halaman web lain yang ada di dalam proyek. Berikut isi ```base.html```: <br>
+            ```html
+            {% load static %}
+            <!DOCTYPE html>
+            <html lang="en">
+                <head>
+                    <meta charset="UTF-8" />
+                    <meta
+                        name="viewport"
+                        content="width=device-width, initial-scale=1.0"
+                    />
+                    {% block meta %}
+                    {% endblock meta %}
+                </head>
+
+                <body>
+                    {% block content %}
+                    {% endblock content %}
+                </body>
+            </html>
+            ```
+        - Memodifikasi file ```settings.py``` yang ada pada subfolder ```battlechar``` dengan menambahkan kode di bagian dictionary dengan key ```DIRS``` pada variabel list ```TEMPLATES```  seperti berikut: <br>
+            ```python
+            TEMPLATES = [
+                {
+                    'BACKEND': 'django.template.backends.django.DjangoTemplates',
+                    'DIRS': [BASE_DIR / 'templates'], # Tambahkan kode ini
+                    'APP_DIRS': True,
+                    'OPTIONS': {
+                        'context_processors': [
+                            'django.template.context_processors.debug',
+                            'django.template.context_processors.request',
+                            'django.contrib.auth.context_processors.auth',
+                            'django.contrib.messages.context_processors.messages',
+                        ],
+                    },
+                },
+            ]
+            ```
+        - Memodifikasi ```main.html``` pada folder ```main``` seperti berikut: <br>
+            ```html
+            <!-- Table from https://www.w3schools.com/tags/tryit.asp?filename=tryhtml_th -->
+            {% extends 'base.html' %}
+
+            {% block content %}
+            <style>
+                table, th, td {
+                    border: 1px solid black;
+                }
+            </style>
+
+            <h1>BattleChar</h1>
+
+            <h5>Name: </h5>
+            <p>{{ creator }}</p> <!-- Ubahlah sesuai dengan nama kamu -->
+            <h5>Student ID: </h5>
+            <p>{{ student_id }}</p>
+            <h5>Class: </h5>
+            <p>{{ class }}</p> <!-- Ubahlah sesuai dengan kelas kamu -->
+
+            {% endblock content %}
+            ```
+    - Membuat form input data operator dan menampilkan data operator-operator pada HTML <br>
+        - Membuat file ```forms.py``` di dalam folder main yang dapat menerima data produk baru. Berikut kode di dalam ```forms.py```: <br>
+            ```python
+            from django.forms import ModelForm
+            from main.models import Operator
+
+            class OperatorForm(ModelForm):
+                class Meta:
+                    model = Operator
+                    fields = ["name", "unit", "primary_weapon", 
+                            "secondary_weapon", "primary_weapon_ammo_amount", "secondary_weapon_ammo_amount", 
+                            "armor", "speed", "description", "price"]
+            ```
+        - Memodifikasi file ```views.py``` yang terdapat di folder ```main``` sebagai berikut: <br>
+            ```python
+            from django.shortcuts import render
+            from django.http import HttpResponseRedirect
+            from main.forms import OperatorForm
+            from django.urls import reverse
+            from main.models import Operator
+            from django.http import HttpResponse
+            from django.core import serializers
+
+            def create_operator(request):
+                form = OperatorForm(request.POST or None)
+
+                if form.is_valid() and request.method == "POST":
+                    form.save()
+                    return HttpResponseRedirect(reverse("main:show_main"))
+                
+                context = {"form": form}
+                return render(request, "create_operator.html", context)
+            ```
+        - Memodifikasi ```urls.py``` yang terdapat pada folder ```main``` dengan import fungsi ```create_operator```. <br>
+            ```python
+            from main.views import show_main, create_operator
+            ```
+        - Menambahkan path URL data form ke dalam ```urlpatterns``` pada ```urls.py``` yang terdapat di folder ```main```. <br>
+            ```python
+            path('create-operator', create_operator, name='create_operator'),
+            ```
+        - Membuat file dengan nama ```create_operator.html``` di dalam folder ```main/templates``` dengan isi: <br>
+            ```html
+            {% extends 'base.html' %}
+
+            {% block content %}
+            <h1>Add Operator</h1>
+
+            <form method="POST">
+            {% csrf_token %}
+            <table>
+                {{ form.as_table }}
+                <tr>
+                <td></td>
+                <td>
+                    <input type="submit" value="Add Operator">
+                </td>
+                </tr>
+            </table>
+            </form>
+
+            {% endblock %}
+            ```
+        - Memodifikasi ```main.html``` yang terdapat di ```main/templates``` dengan menambahkan kode di bawah ini di dalam ```{% block content %}``` untuk menampilkan data operator yang telah dimasukkan dan sebuah tombol untuk redirect ke halaman form. <br>
+            ```html
+            <br />
+            <h3>{{ roster_size }}</h3> <!-- BONUS -->
+            <table>
+                <tr>
+                    <th>Name</th>
+                    <th>Unit</th>
+                    <th>Primary weapon</th>
+                    <th>Secondary weapon</th>
+                    <th>Primary weapon ammo</th>
+                    <th>Secondary weapon ammo</th>
+                    <th>Armor</th>
+                    <th>Speed</th>
+                    <th>Description</th>
+                    <th>Price</th>
+                </tr>
+
+                {% for operator in operators %}
+                    <tr>
+                        <td><center>{{ operator.name }}</center></td>
+                        <td><center>{{ operator.unit }}</center></td>
+                        <td><center>{{ operator.primary_weapon }}</center></td>
+                        <td><center>{{ operator.secondary_weapon }}</center></td>
+                        <td><center>{{ operator.primary_weapon_ammo_amount }}</center></td>
+                        <td><center>{{ operator.secondary_weapon_ammo_amount }}</center></td>
+                        <td><center>{{ operator.armor }}</center></td>
+                        <td><center>{{ operator.speed }}</center></td>
+                        <td>{{ operator.description }}</td>
+                        <td><center>{{ operator.price }}</center></td>
+                    </tr>
+                {% endfor %}
+            </table>
+
+            <br />
+
+            <a href="{% url 'main:create_operator' %}">
+                <button>
+                    Add New Operator
+                </button>
+            </a>
+
+            {% endblock content %}
+            ```
+- [x] Tambahkan 5 fungsi ```views``` untuk melihat objek yang sudah ditambahkan dalam format HTML, XML, JSON, XML by ID, dan JSON by ID. <br>
+    - Memodifikasi fungsi ```show_main``` di dalam ```views.py``` pada folder ```main``` agar dapat mengembalikan render HTML berupa data pembuat web, data operator yang telah dimasukkan, serta berapa jumlah operator yang sudah dimasukkan (BONUS). <br>
+        ```python
+        def show_main(request):
+            operators = Operator.objects.all()
+            # BONUS
+            roster_size = len(operators)
+            roster_size_message = f"You have {roster_size} operator(s) in your roster"
+
+            context = {
+                'creator': 'Dimas Herjunodarpito Notoprayitno',
+                'student_id': '2206081282',
+                'class': 'PBP C',
+                'operators': operators,
+                'roster_size': roster_size_message,
+            }
+
+            return render(request, "main.html", context)
+        ```
+    - Membuat fungsi untuk mengembalikan data-data dalam bentuk XML dengan menambahkan kode pada ```views.py``` seperti berikut: <br>
+        ```python
+        def show_xml(request):
+            data = Operator.objects.all()
+            return HttpResponse(serializers.serialize("xml", data), content_type="application/xml")
+        ```
+    - Membuat fungsi untuk mengembalikan data-data dalam bentuk JSON dengan menambahkan kode pada ```views.py``` seperti berikut: <br>
+        ```python
+        def show_json(request):
+            data = Operator.objects.all()
+            return HttpResponse(serializers.serialize("json", data), content_type="application/json")
+        ```
+    - Membuat fungsi untuk mengembalikan data dari suatu ID tertentu dalam bentuk XML dengan menambahkan kode pada ```views.py``` seperti berikut: <br>
+        ```python
+        def show_xml_by_id(request, id):
+            data = Operator.objects.filter(pk=id)
+            return HttpResponse(serializers.serialize("xml", data), content_type="application/xml")
+        ```
+    - Membuat fungsi untuk mengembalikan data dari suatu ID tertentu dalam bentuk JSON dengan menambahkan kode pada ```views.py``` seperti berikut: <br>
+        ```python
+        def show_json_by_id(request, id):
+            data = Operator.objects.filter(pk=id)
+            return HttpResponse(serializers.serialize("json", data), content_type="application/json")
+        ```
+- [x] Membuat routing URL untuk masing-masing ```views``` yang telah ditambahkan pada poin 2. <br>
+    - Memodifikasi ```urls.py``` pada folder ```main``` menjadi seperti ini:
+        ```python
+        from django.urls import path
+        from main.views import show_json, show_json_by_id, show_main, create_operator, show_xml, show_xml_by_id
+
+        app_name = 'main'
+
+        urlpatterns = [
+            path('', show_main, name='show_main'),
+            path('create-operator', create_operator, name='create_operator'),
+            path('xml/', show_xml, name='show_xml'),
+            path('json/', show_json, name='show_json'),
+            path('xml/<int:id>/', show_xml_by_id, name='show_xml_by_id'),
+            path('json/<int:id>/', show_json_by_id, name='show_json_by_id'),
+        ]
+        ```
+- [x] Menjawab beberapa pertanyaan berikut pada ```README.md``` pada root folder. <br>
+    - [x] Apa perbedaan antara form ```POST``` dan form ```GET``` dalam Django? <br>
+        **Jawab:** <br>
+        Form pada Django dikembalikan dengan menggunakan metode POST, di mana browser membundel data formulir, mengkodekannya untuk transmisi, mengirimkannya ke server, dan kemudian menerima kembali responsnya. Sebaliknya, GET, menggabungkan data yang dikirimkan ke dalam sebuah string, dan menggunakannya untuk membuat URL. <br><br>
+    - [x] Apa perbedaan utama antara XML, JSON, dan HTML dalam konteks pengiriman data? <br>
+        **Jawab:** <br>
+        JSON merupakan format penukaran data secara terbuka yang dapat dibaca dengan mudah oleh manusia maupun mesin atau komputer. JSON memiliki sifat yang independen dari setiap bahasa pemrograman serta merupakan output API yang umum dalam berbagai aplikasi. XML adalah bahasa markah yang menyediakan aturan untuk menentukan jenis data. XML sendiri menggunakan tanda-tanda untuk membedakan atribut dengan data yang aktual. HTML merupakan bahasa markah sama seperti XML tetapi dimanfaatkan untuk menafsirkan dan menulis data seperti teks, gambar, dan bahan lainnya ke dalam halaman web. <br><br>
+    - [x] Mengapa JSON sering digunakan dalam pertukaran data antara aplikasi web modern? <br>
+        **Jawab:** <br>
+        Karena JSON lebih mudah dibaca baik oleh manusia maupun mesin atau komputer serta JSON merupakan opsi yang lebih baru, lebih fleksibel, dan lebih populer ketimbang dengan opsi yang lain. <br><br>
+    - [x] Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step (bukan hanya sekadar mengikuti tutorial)! <br>
+        **Jawab:** <br>
+        Sudah dijelaskan di atas. <br>
+- [x] Mengakses kelima URL di poin 2 menggunakan Postman, membuat screenshot dari hasil akses URL pada Postman, dan menambahkannya ke dalam ```README.md```. <br>
+    ![html](/doks_md/html.png) <br>
+    ![json](/doks_md/json.png) <br>
+    ![json2](/doks_md/json2.png) <br>
+    ![xml](/doks_md/xml.png) <br>
+    ![xml2](/doks_md/xml2.png) <br>
+- [x] Melakukan ```add```-```commit```-```push``` ke GitHub. <br>
