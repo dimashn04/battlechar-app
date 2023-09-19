@@ -577,6 +577,7 @@ Checklist untuk tugas ini adalah sebagai berikut: <br>
         **Jawab:** <br>
         Sudah dijelaskan di atas. <br>
 - [x] Mengakses kelima URL di poin 2 menggunakan Postman, membuat screenshot dari hasil akses URL pada Postman, dan menambahkannya ke dalam ```README.md```. <br>
+    ![html2](/doks_md/html2.png) <br>
     ![html](/doks_md/html.png) <br>
     ![json](/doks_md/json.png) <br>
     ![json2](/doks_md/json2.png) <br>
