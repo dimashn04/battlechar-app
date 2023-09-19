@@ -32,6 +32,18 @@ def show_json_by_id(request, id):
     data = Operator.objects.filter(pk=id)
     return HttpResponse(serializers.serialize("json", data), content_type="application/json")
 
+def show_html(request):
+    operators = Operator.objects.all()
+    roster_size = len(operators)
+    roster_size_message = f"You have {roster_size} operator(s) in your roster"
+    
+    context = {
+        'operators': operators,
+        'roster_size': roster_size_message,
+    }
+
+    return render(request, "show_only_operators.html", context)
+
 # Create your views here.
 def show_main(request):
     operators = Operator.objects.all()

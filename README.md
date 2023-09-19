@@ -461,6 +461,66 @@ Checklist untuk tugas ini adalah sebagai berikut: <br>
 
             return render(request, "main.html", context)
         ```
+    - Membuat fungsi untuk mengembalikan data-data dalam bentuk HTML dengan menambahkan kode pada ```views.py``` seperti berikut:
+        ```python
+        def show_html(request):
+            operators = Operator.objects.all()
+            roster_size = len(operators)
+            roster_size_message = f"You have {roster_size} operator(s) in your roster"
+            
+            context = {
+                'operators': operators,
+                'roster_size': roster_size_message,
+            }
+
+            return render(request, "show_only_operators.html", context)
+        ```
+        Serta menambahkan juga file HTML di dalam ```main/templates``` dengan nama ```show_only_operators.html``` seperti berikut: <br>
+        ```html
+        <!-- Table from https://www.w3schools.com/tags/tryit.asp?filename=tryhtml_th -->
+        {% extends 'base.html' %}
+
+        {% block content %}
+        <style>
+            table, th, td {
+                border: 1px solid black;
+            }
+        </style>
+
+        <br />
+        <h3>{{ roster_size }}</h3>
+        <table>
+            <tr>
+                <th>Name</th>
+                <th>Unit</th>
+                <th>Primary weapon</th>
+                <th>Secondary weapon</th>
+                <th>Primary weapon ammo</th>
+                <th>Secondary weapon ammo</th>
+                <th>Armor</th>
+                <th>Speed</th>
+                <th>Description</th>
+                <th>Price</th>
+            </tr>
+
+            {% for operator in operators %}
+                <tr>
+                    <td><center>{{ operator.name }}</center></td>
+                    <td><center>{{ operator.unit }}</center></td>
+                    <td><center>{{ operator.primary_weapon }}</center></td>
+                    <td><center>{{ operator.secondary_weapon }}</center></td>
+                    <td><center>{{ operator.primary_weapon_ammo_amount }}</center></td>
+                    <td><center>{{ operator.secondary_weapon_ammo_amount }}</center></td>
+                    <td><center>{{ operator.armor }}</center></td>
+                    <td><center>{{ operator.speed }}</center></td>
+                    <td>{{ operator.description }}</td>
+                    <td><center>{{ operator.price }}</center></td>
+                </tr>
+            {% endfor %}
+        </table>
+
+        {% endblock content %}
+        ```
     - Membuat fungsi untuk mengembalikan data-data dalam bentuk XML dengan menambahkan kode pada ```views.py``` seperti berikut: <br>
         ```python
         def show_xml(request):
@@ -489,7 +549,7 @@ Checklist untuk tugas ini adalah sebagai berikut: <br>
     - Memodifikasi ```urls.py``` pada folder ```main``` menjadi seperti ini:
         ```python
         from django.urls import path
-        from main.views import show_json, show_json_by_id, show_main, create_operator, show_xml, show_xml_by_id
+        from main.views import show_html, show_json, show_json_by_id, show_main, create_operator, show_xml, show_xml_by_id
 
         app_name = 'main'
 
@@ -497,6 +557,7 @@ Checklist untuk tugas ini adalah sebagai berikut: <br>
             path('', show_main, name='show_main'),
             path('create-operator', create_operator, name='create_operator'),
             path('xml/', show_xml, name='show_xml'),
+            path('html/', show_html, name='show_html'),
             path('json/', show_json, name='show_json'),
             path('xml/<int:id>/', show_xml_by_id, name='show_xml_by_id'),
             path('json/<int:id>/', show_json_by_id, name='show_json_by_id'),

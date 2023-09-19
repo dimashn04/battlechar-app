@@ -1,0 +1,43 @@
+<!-- Table from https://www.w3schools.com/tags/tryit.asp?filename=tryhtml_th -->
+{% extends 'base.html' %}
+
+{% block content %}
+<style>
+    table, th, td {
+        border: 1px solid black;
+    }
+</style>
+
+<br />
+<h3>{{ roster_size }}</h3>
+<table>
+    <tr>
+        <th>Name</th>
+        <th>Unit</th>
+        <th>Primary weapon</th>
+        <th>Secondary weapon</th>
+        <th>Primary weapon ammo</th>
+        <th>Secondary weapon ammo</th>
+        <th>Armor</th>
+        <th>Speed</th>
+        <th>Description</th>
+        <th>Price</th>
+    </tr>
+
+    {% for operator in operators %}
+        <tr>
+            <td><center>{{ operator.name }}</center></td>
+            <td><center>{{ operator.unit }}</center></td>
+            <td><center>{{ operator.primary_weapon }}</center></td>
+            <td><center>{{ operator.secondary_weapon }}</center></td>
+            <td><center>{{ operator.primary_weapon_ammo_amount }}</center></td>
+            <td><center>{{ operator.secondary_weapon_ammo_amount }}</center></td>
+            <td><center>{{ operator.armor }}</center></td>
+            <td><center>{{ operator.speed }}</center></td>
+            <td>{{ operator.description }}</td>
+            <td><center>{{ operator.price }}</center></td>
+        </tr>
+    {% endfor %}
+</table>
+
+{% endblock content %}
