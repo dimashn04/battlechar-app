@@ -1,6 +1,10 @@
 <!-- Table from https://www.w3schools.com/tags/tryit.asp?filename=tryhtml_th -->
 {% extends 'base.html' %}
 
+{% block meta %}
+    <title>ROSTER</title>
+{% endblock meta %}
+
 {% block content %}
 <style>
     table, th, td {
@@ -12,8 +16,6 @@
 
 <h5>Name: </h5>
 <p>{{ creator }}</p> <!-- Ubahlah sesuai dengan nama kamu -->
-<h5>Student ID: </h5>
-<p>{{ student_id }}</p>
 <h5>Class: </h5>
 <p>{{ class }}</p> <!-- Ubahlah sesuai dengan kelas kamu -->
 
@@ -31,6 +33,11 @@
         <th>Speed</th>
         <th>Description</th>
         <th>Price</th>
+        <th>Add Primary Ammo</th>
+        <th>Add Secondary Ammo</th>
+        <th>Decrease Primary Ammo</th>
+        <th>Decrease Secondary Ammo</th>
+        <th>Remove Operator</th>
     </tr>
 
     {% for operator in operators %}
@@ -45,6 +52,36 @@
             <td><center>{{ operator.speed }}</center></td>
             <td>{{ operator.description }}</td>
             <td><center>{{ operator.price }}</center></td>
+            <td><center>
+                <form action="{% url 'main:add_primary_ammo_amount' operator.id %}" method="post">
+                    {% csrf_token %}
+                    <button type="submit" name="Increment">Add</button>
+                </form>
+            </td></center>
+            <td><center>
+                <form action="{% url 'main:add_secondary_ammo_amount' operator.id %}" method="post">
+                    {% csrf_token %}
+                    <button type="submit" name="Increment">Add</button>
+                </form></center>
+            </td>
+            <td><center>
+                <form action="{% url 'main:dec_primary_ammo_amount' operator.id %}" method="post">
+                    {% csrf_token %}
+                    <button type="submit" name="Decrement">Decrease</button>
+                </form>
+            </td></center>
+            <td><center>
+                <form action="{% url 'main:dec_secondary_ammo_amount' operator.id %}" method="post">
+                    {% csrf_token %}
+                    <button type="submit" name="Decrement">Decrease</button>
+                </form>
+            </td></center>
+            <td><center>
+                <form action="{% url 'main:remove_operator' operator.id %}" method="post">
+                    {% csrf_token %}
+                    <button type="submit" name="Remove">Remove</button>
+                </form>
+            </td></center>
         </tr>
     {% endfor %}
 </table>
@@ -56,5 +93,15 @@
         Add New Operator
     </button>
 </a>
+
+<a href="{% url 'main:logout' %}">
+    <button>
+        Logout
+    </button>
+</a>
+
+<br />
+
+<h5>Sesi terakhir login: {{ last_login }}</h5>
 
 {% endblock content %}

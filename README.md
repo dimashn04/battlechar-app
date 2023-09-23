@@ -584,3 +584,485 @@ Checklist untuk tugas ini adalah sebagai berikut: <br>
     ![xml](/doks_md/xml.png) <br>
     ![xml2](/doks_md/xml2.png) <br>
 - [x] Melakukan ```add```-```commit```-```push``` ke GitHub. <br>
+
+# PBP Tugas 4
+## Checklist Tugas
+Checklist untuk tugas ini adalah sebagai berikut: <br>
+- [x] Mengimplementasikan fungsi registrasi, login, dan logout untuk memungkinkan pengguna untuk mengakses aplikasi sebelumnya dengan lancar. <br>
+    - Menyalakan Python virtual environment. <br>
+    - Menambahkan beberapa kode serta import di dalam ```main/views.py``` seperti function register, login, logout <br>
+        ```python
+        import datetime
+        from django.http import HttpResponseRedirect
+        from django.urls import reverse
+        from django.contrib.auth.decorators import login_required
+        from django.contrib.auth import logout
+        from django.contrib.auth import authenticate, login
+        from django.shortcuts import redirect
+        from django.contrib.auth.forms import UserCreationForm
+        from django.contrib import messages  
+        from django.shortcuts import render
+        from django.http import HttpResponseRedirect
+        from main.forms import OperatorForm
+        from django.urls import reverse
+        from main.models import Operator
+        from django.http import HttpResponse
+        from django.core import serializers
+
+        ...
+
+        def logout_user(request):
+            logout(request)
+            response = HttpResponseRedirect(reverse('main:login'))
+            response.delete_cookie('last_login')
+            return response
+
+        def register(request):
+            form = UserCreationForm()
+
+            if request.method == "POST":
+                form = UserCreationForm(request.POST)
+                if form.is_valid():
+                    form.save()
+                    messages.success(request, 'Your account has been successfully created!')
+                    return redirect('main:login')
+            context = {'form':form}
+            return render(request, 'register.html', context)
+
+        def login_user(request):
+            if request.method == 'POST':
+                username = request.POST.get('username')
+                password = request.POST.get('password')
+                user = authenticate(request, username=username, password=password)
+                if user is not None:
+                    login(request, user)
+                    response = HttpResponseRedirect(reverse("main:show_main")) 
+                    response.set_cookie('last_login', str(datetime.datetime.now()))
+                    return response
+                else:
+                    messages.info(request, 'Sorry, incorrect username or password. Please try again.')
+            context = {}
+            return render(request, 'login.html', context)
+
+        ...
+        ```
+    - Menambahkan file HTML di dalam ```main/templates``` berupa ```login.html``` dan ```register.html```. <br>
+        - ```login.html``` : <br>
+            ```html
+            {% extends 'base.html' %}
+
+            {% block meta %}
+                <title>LOGIN</title>
+            {% endblock meta %}
+
+            {% block content %}
+
+            <div class = "login">
+
+                <h1>Login</h1>
+
+                <form method="POST" action="">
+                    {% csrf_token %}
+                    <table>
+                        <tr>
+                            <td>Username: </td>
+                            <td><input type="text" name="username" placeholder="Username" class="form-control"></td>
+                        </tr>
+                                
+                        <tr>
+                            <td>Password: </td>
+                            <td><input type="password" name="password" placeholder="Password" class="form-control"></td>
+                        </tr>
+
+                        <tr>
+                            <td></td>
+                            <td><input class="btn login_btn" type="submit" value="Login"></td>
+                        </tr>
+                    </table>
+                </form>
+
+                {% if messages %}
+                    <ul>
+                        {% for message in messages %}
+                            <li>{{ message }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}     
+                    
+                Don't have an account yet? <a href="{% url 'main:register' %}">Register Now</a>
+
+            </div>
+
+            {% endblock content %}
+            ```
+        - ```register.html``` : <br>
+            ```html
+            {% extends 'base.html' %}
+
+            {% block meta %}
+                <title>REGISTER</title>
+            {% endblock meta %}
+
+            {% block content %}  
+
+            <div class = "login">
+                
+                <h1>Register</h1>  
+
+                    <form method="POST" >  
+                        {% csrf_token %}  
+                        <table>  
+                            {{ form.as_table }}  
+                            <tr>  
+                                <td></td>
+                                <td><input type="submit" name="submit" value="Daftar"/></td>  
+                            </tr>  
+                        </table>  
+                    </form>
+
+                {% if messages %}  
+                    <ul>   
+                        {% for message in messages %}  
+                            <li>{{ message }}</li>  
+                            {% endfor %}  
+                    </ul>   
+                {% endif %}
+
+            </div>  
+
+            {% endblock content %}
+            ```
+    - Menambahkan beberapa kode di ```main/urls.py``` <br>
+        ```python
+        from django.urls import path
+        from main.views import (show_html, show_json, show_json_by_id, show_main, create_operator, 
+                                show_xml, show_xml_by_id, register, login_user, logout_user,
+                                add_primary_ammo_amount, add_secondary_ammo_amount, dec_primary_ammo_amount,
+                                dec_secondary_ammo_amount, remove_operator)
+
+        app_name = 'main'
+
+        urlpatterns = [
+            ...
+            path('register/', register, name='register'),
+            path('login/', login_user, name='login'),
+            path('logout/', logout_user, name='logout'),
+        ]
+        ```
+    - Menambahkan tombol logout di dalam main page dengan menambahkan kode pada ```main/templates/main.html``` setelah hyperlink tag untuk Add New Operator <br>
+        ```html
+        ...
+        <a href="{% url 'main:logout' %}">
+            <button>
+                Logout
+            </button>
+        </a>
+        ...
+        ```
+    - Menambahkan kode ini di dalam ```main/views.py``` untuk merestriksi akses ke halaman main tanpa login <br>
+        ```python
+        ...
+        @login_required(login_url='/login')
+        def show_main(request):
+        ...
+        ```
+- [x] Menghubungkan model Operator dengan User.
+    - Menambahkan kode pada ```main/models.py``` <br>
+        ```python
+        from django.db import models
+        from django.core.validators import MinValueValidator, MaxValueValidator
+        from django.contrib.auth.models import User
+
+        class Operator(models.Model):
+            user = models.ForeignKey(User, on_delete=models.CASCADE)
+            name = models.CharField(max_length=255)
+            unit = models.CharField(max_length=255)
+            primary_weapon = models.CharField(max_length=255)
+            secondary_weapon = models.CharField(max_length=255)
+            primary_weapon_ammo_amount = models.IntegerField()
+            secondary_weapon_ammo_amount = models.IntegerField()
+            armor = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(3)])
+            speed = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(3)]) 
+            description = models.TextField()
+            price = models.IntegerField()
+        ```
+    - Memodifikasi kode pada ```main/views.py``` <br>
+        ```python
+        def create_operator(request):
+            form = OperatorForm(request.POST or None)
+
+            if form.is_valid() and request.method == "POST":
+                product = form.save(commit=False)
+                product.user = request.user
+                product.save()
+                return HttpResponseRedirect(reverse('main:show_main'))
+            
+            context = {"form": form}
+            return render(request, "create_operator.html", context)
+        ```
+    - Memodifikasi fungsi show_main pada ```main/views.py``` <br>
+        ```python
+        @login_required(login_url='/login')
+        def show_main(request):
+            operators = Operator.objects.filter(user=request.user)
+            roster_size = len(operators)
+            roster_size_message = f"You have {roster_size} operator(s) in your roster"
+
+            context = {
+                'creator': request.user.username,
+                ...
+        ```
+    - Menyimpan dan melakukan migrasi dengan ```python manage.py makemigrations``` <br>
+    - Jika muncul error saat melakukan migrasi model, maka pilih 1 untuk menetapkan default value untuk field user pada semua row yang telah dibuat pada basis data. <br>
+    - Mengetik angka 1 lagi untuk menetapkan user dengan ID 1 (yang sudah dibuat sebelumnya) pada model yang sudah ada. <br>
+    - Lakukan ```python manage.py migrate``` <br>
+- [x] Menampilkan detail informasi pengguna yang sedang logged in seperti username dan menerapkan cookies seperti last login pada halaman utama aplikasi. <br>
+    - Menambahkan import pada ```main/views.py``` di bagian paling atas <br>
+        ```python
+        import datetime
+        from django.http import HttpResponseRedirect
+        from django.urls import reverse
+        ```
+    - Memodifikasi fungsi login_user pada ```main/views.py``` <br>
+        ```python
+        def login_user(request):
+            if request.method == 'POST':
+                username = request.POST.get('username')
+                password = request.POST.get('password')
+                user = authenticate(request, username=username, password=password)
+                if user is not None:
+                    login(request, user)
+                    response = HttpResponseRedirect(reverse("main:show_main")) 
+                    response.set_cookie('last_login', str(datetime.datetime.now()))
+                    return response
+                else:
+                    messages.info(request, 'Sorry, incorrect username or password. Please try again.')
+            context = {}
+            return render(request, 'login.html', context)
+        ```
+    - Memodifikasi fungsi show_main pada ```main/views.py``` <br>
+        ```python
+        @login_required(login_url='/login')
+        def show_main(request):
+            operators = Operator.objects.filter(user=request.user)
+            roster_size = len(operators)
+            roster_size_message = f"You have {roster_size} operator(s) in your roster"
+
+            context = {
+                'creator': request.user.username,
+                'class': 'PBP C',
+                'operators': operators,
+                'roster_size': roster_size_message,
+                'last_login': request.COOKIES['last_login']
+            }
+
+            return render(request, "main.html", context)
+        ```
+    - Memodifikasi file ```main/templates/main.html``` dengan menambahkan potongan kode di antara tabel dan tombol logout untuk menampilkan data last login. <br>
+        ```python
+        ...
+        <h5>Sesi terakhir login: {{ last_login }}</h5>
+        ...
+        ```
+
+**BONUS** <br>
+Special thanks To Fariz Zhafir Faza for teaching me on how to do this. <br>
+- [x] Membuat dua akun pengguna dengan masing-masing tiga dummy data menggunakan model yang telah dibuat pada aplikasi sebelumnya untuk setiap akun di lokal. <br>
+    ![hokum](/doks_md/hokum.png) <br>
+    ![dhn](/doks_md/dhn.png) <br>
+- [x] Tambahkan tombol dan fungsi untuk menambahkan amount suatu objek sebanyak satu dan tombol untuk mengurangi jumlah stok suatu objek sebanyak satu.
+    - Menambahkan function-function berikut di ```main/views.py``` <br>
+        ```python
+        ...
+
+        def add_primary_ammo_amount(request, operator_id):
+            if request.method == 'POST' and 'Increment' in request.POST:
+                operator = Operator.objects.get(id=operator_id)
+                operator.primary_weapon_ammo_amount += 1
+                operator.save()
+            return HttpResponseRedirect(reverse('main:show_main'))
+
+        def dec_primary_ammo_amount(request, operator_id):
+            if request.method == 'POST' and 'Decrement' in request.POST:
+                operator = Operator.objects.get(id=operator_id)
+                operator.primary_weapon_ammo_amount -= 1
+                operator.save()
+            return HttpResponseRedirect(reverse('main:show_main'))
+
+        def add_secondary_ammo_amount(request, operator_id):
+            if request.method == 'POST' and 'Increment' in request.POST:
+                operator = Operator.objects.get(id=operator_id)
+                operator.secondary_weapon_ammo_amount += 1
+                operator.save()
+            return HttpResponseRedirect(reverse('main:show_main'))
+
+        ...
+
+        def dec_secondary_ammo_amount(request, operator_id):
+            if request.method == 'POST' and 'Decrement' in request.POST:
+                operator = Operator.objects.get(id=operator_id)
+                operator.secondary_weapon_ammo_amount += 1
+                operator.save()
+            return HttpResponseRedirect(reverse('main:show_main'))
+        
+        ...
+        ```
+    - Memodfikasi ```main/urls.py``` <br>
+        ```python
+        from django.urls import path
+        from main.views import (show_html, show_json, show_json_by_id, show_main, create_operator, 
+                                show_xml, show_xml_by_id, register, login_user, logout_user,
+                                add_primary_ammo_amount, add_secondary_ammo_amount, dec_primary_ammo_amount,
+                                dec_secondary_ammo_amount, remove_operator)
+
+        app_name = 'main'
+
+        urlpatterns = [
+            ...
+            path('add_primary_ammo_amount/<int:operator_id>/', add_primary_ammo_amount, name='add_primary_ammo_amount'),
+            path('add_secondary_ammo_amount/<int:operator_id>/', add_secondary_ammo_amount, name='add_secondary_ammo_amount'),
+            path('dec_primary_ammo_amount/<int:operator_id>/', dec_primary_ammo_amount, name='dec_primary_ammo_amount'),
+            path('dec_secondary_ammo_amount/<int:operator_id>/', dec_secondary_ammo_amount, name='dec_secondary_ammo_amount'),
+            ....
+        ]
+        ```
+    - Menambahkan kode berikut di dalam ```main/templates/main.html``` <br>
+        ```python
+        ...
+
+            <td>{{ operator.description }}</td>
+            <td><center>{{ operator.price }}</center></td>
+            <td><center>
+                <form action="{% url 'main:add_primary_ammo_amount' operator.id %}" method="post">
+                    {% csrf_token %}
+                    <button type="submit" name="Increment">Add</button>
+                </form>
+            </td></center>
+            <td><center>
+                <form action="{% url 'main:add_secondary_ammo_amount' operator.id %}" method="post">
+                    {% csrf_token %}
+                    <button type="submit" name="Increment">Add</button>
+                </form></center>
+            </td>
+            <td><center>
+                <form action="{% url 'main:dec_primary_ammo_amount' operator.id %}" method="post">
+                    {% csrf_token %}
+                    <button type="submit" name="Decrement">Decrease</button>
+                </form>
+            </td></center>
+            <td><center>
+                <form action="{% url 'main:dec_secondary_ammo_amount' operator.id %}" method="post">
+                    {% csrf_token %}
+                    <button type="submit" name="Decrement">Decrease</button>
+                </form>
+            </td></center>
+        
+        ...
+        ```
+- [x] Tambahkan tombol dan fungsi untuk menghapus suatu objek dari inventori. <br>
+    - Menambahkan function berikut di ```main/views.py``` <br>
+        ```python
+        def remove_operator(request, operator_id):
+            if request.method == 'POST' and 'Remove' in request.POST:
+                operator = Operator.objects.get(id=operator_id)
+                operator.delete()
+            return HttpResponseRedirect(reverse('main:show_main'))
+        ```
+    - Memodfikasi ```main/urls.py``` <br>
+        ```python
+        from django.urls import path
+        from main.views import (show_html, show_json, show_json_by_id, show_main, create_operator, 
+                                show_xml, show_xml_by_id, register, login_user, logout_user,
+                                add_primary_ammo_amount, add_secondary_ammo_amount, dec_primary_ammo_amount,
+                                dec_secondary_ammo_amount, remove_operator)
+
+        app_name = 'main'
+
+        urlpatterns = [
+            ...
+            path('remove_operator/<int:operator_id>/', remove_operator, name='remove_operator'),
+            ...
+        ]
+        ```
+    - Menambahkan kode berikut di dalam ```main/templates/main.html``` <br>
+        ```python
+        ...
+
+            <td>{{ operator.description }}</td>
+            <td><center>{{ operator.price }}</center></td>
+            <td><center>
+                <form action="{% url 'main:add_primary_ammo_amount' operator.id %}" method="post">
+                    {% csrf_token %}
+                    <button type="submit" name="Increment">Add</button>
+                </form>
+            </td></center>
+            <td><center>
+                <form action="{% url 'main:add_secondary_ammo_amount' operator.id %}" method="post">
+                    {% csrf_token %}
+                    <button type="submit" name="Increment">Add</button>
+                </form></center>
+            </td>
+            <td><center>
+                <form action="{% url 'main:dec_primary_ammo_amount' operator.id %}" method="post">
+                    {% csrf_token %}
+                    <button type="submit" name="Decrement">Decrease</button>
+                </form>
+            </td></center>
+            <td><center>
+                <form action="{% url 'main:dec_secondary_ammo_amount' operator.id %}" method="post">
+                    {% csrf_token %}
+                    <button type="submit" name="Decrement">Decrease</button>
+                </form>
+            </td></center>
+            <td><center>
+                <form action="{% url 'main:remove_operator' operator.id %}" method="post">
+                    {% csrf_token %}
+                    <button type="submit" name="Remove">Remove</button>
+                </form>
+            </td></center>
+        ...
+        ```
+- [x] Menjawab beberapa pertanyaan berikut pada ```README.md``` pada root folder (silakan modifikasi ```README.md``` yang telah kamu buat sebelumnya; tambahkan subjudul untuk setiap tugas). <br>
+    - [x] Apa itu ```Django UserCreationForm```, dan jelaskan apa kelebihan dan kekurangannya? <br>
+        **Jawab:** <br>
+        UserCreationForm adalah impor formulir bawaan yang memudahkan pembuatan formulir pendaftaran pengguna dalam aplikasi web. Dengan formulir ini, pengguna baru dapat mendaftar dengan mudah di situs web Anda tanpa harus menulis kode dari awal. Salah satu kekurangan dari UserCreationForm adalah tidak memiliki field untuk Email. <br>
+    - [x] Apa perbedaan antara autentikasi dan otorisasi dalam konteks Django, dan mengapa keduanya penting? <br>
+        **Jawab:** <br>
+        **Autentikasi:** <br>
+        1. Autentikasi adalah proses verifikasi identitas pengguna. Ini digunakan untuk memastikan bahwa pengguna yang mencoba mengakses aplikasi adalah pengguna yang mereka klaim. <br>
+        2. Biasanya, autentikasi melibatkan validasi kombinasi nama pengguna (username) dan kata sandi (password) yang dimasukkan oleh pengguna saat login. <br>
+        3. Django memiliki sistem autentikasi bawaan yang menyediakan metode otentikasi yang aman, termasuk otentikasi berdasarkan database pengguna (user-based) atau otentikasi eksternal seperti OAuth. <br>
+
+        <br>
+
+        **Otorisasi:** <br>
+        1. Otorisasi berkaitan dengan apa yang diizinkan atau tidak diizinkan untuk dilakukan oleh pengguna setelah mereka berhasil diotentikasi. <br>
+        2. Ini adalah tahap berikutnya setelah autentikasi dan berfokus pada pengaturan izin dan hak akses pengguna dalam aplikasi. <br>
+        3. Django menggunakan sistem otorisasi berbasis peran (role-based), di mana pengguna diberikan peran (role) seperti "pengguna biasa" atau "administrator," dan kemudian izin (permissions) ditentukan berdasarkan peran tersebut. Ini memungkinkan pengelolaan akses ke berbagai bagian dari aplikasi. <br>
+
+        <br>
+
+        **Mengapa keduanya penting?** <br>
+        1. Autentikasi penting karena melindungi aplikasi dari akses yang tidak sah. Tanpa autentikasi yang kuat, seseorang dapat dengan mudah menyusup ke dalam sistem dan melakukan tindakan yang tidak diizinkan. <br>
+        2. Otorisasi penting karena memungkinkan pengontrolan granular terhadap tindakan yang dapat dilakukan oleh pengguna yang sudah diotentikasi. Ini memastikan bahwa pengguna hanya dapat mengakses atau melakukan operasi yang sesuai dengan peran atau izin yang mereka miliki dalam aplikasi. <br>
+    - [x] Apa itu cookies dalam konteks aplikasi web, dan bagaimana Django menggunakan cookies untuk mengelola data sesi pengguna? <br>
+        **Jawab:** <br>
+        Cookies adalah bagian kecil data yang disimpan di komputer pengguna saat mereka mengunjungi sebuah situs web. Cookies digunakan dalam konteks aplikasi web untuk menyimpan informasi pada sisi klien (browser pengguna) yang dapat digunakan oleh server web saat pengguna melakukan permintaan berikutnya ke situs tersebut. Salah satu penggunaan utama cookies adalah untuk mengelola data sesi pengguna. <br>
+
+        <br>
+        Django, sebagai kerangka kerja web Python, menyediakan dukungan bawaan untuk mengelola cookies dan data sesi pengguna. Berikut adalah bagaimana Django menggunakan cookies untuk mengelola data sesi pengguna: <br>
+        1. Membuat Session Cookies: Saat pengguna pertama kali mengakses situs web Django, server akan membuat cookie sesi baru dan mengirimkannya ke browser pengguna. Cookie ini berisi ID sesi unik yang terkait dengan sesi pengguna. <br>
+        2. Menyimpan Data Sesuai ID Sesi: Data sesi pengguna disimpan di sisi server, bukan di cookie itu sendiri. Data ini seringkali berisi informasi seperti informasi login, preferensi pengguna, keranjang belanja, dan sebagainya. <br>
+        3. Mengelola Data Sesuai ID Sesi: Setiap kali pengguna membuat permintaan ke situs web yang menggunakan sesi, Django akan mengidentifikasi pengguna berdasarkan ID sesi yang terkandung dalam cookie. Ini memungkinkan server untuk mengambil data sesi yang sesuai dari penyimpanan sesi dan membuatnya tersedia dalam kode aplikasi untuk penggunaan selanjutnya. <br>
+        4. Meng-update Data Sesuai Permintaan: Selama pengguna berinteraksi dengan situs web, data sesi dapat diperbarui atau diperluas sesuai dengan kebutuhan aplikasi. Django menyediakan API untuk menyimpan dan mengambil data sesi ini dalam kode aplikasi Anda. <br>
+        5. Mengakhiri Sesuai Permintaan: Ketika sesi pengguna selesai (misalnya, pengguna keluar atau sesi kedaluwarsa), data sesi dapat dihapus dari penyimpanan sesi server, dan cookie sesi pada browser pengguna dapat dihapus. <br>
+    - [x] Apakah penggunaan cookies aman secara default dalam pengembangan web, atau apakah ada risiko potensial yang harus diwaspadai? <br>
+        **Jawab:** <br>
+        Penggunaan cookies dalam pengembangan web dapat menjadi alat yang aman, tetapi juga memiliki risiko potensial yang perlu diwaspadai. Di bawah ini adalah beberapa pertimbangan terkait dengan keamanan cookies: <br>
+        1. Cross-Site Scripting (XSS): Cookies dapat menjadi sasaran serangan XSS jika data dalam cookies diambil tanpa sanitasi atau validasi yang cukup. Ini dapat mengizinkan penyerang untuk mencuri atau memanipulasi data cookies pengguna. <br>
+        2. Man in the Middle (MitM) Attacks: Cookies yang tidak dienkripsi rentan terhadap serangan MitM, di mana penyerang dapat mencuri atau memodifikasi cookies saat data dikirimkan dari server ke browser pengguna. <br>
+        3. Session Fixation: Penyerang dapat mencoba menetapkan ID sesi mereka sendiri kepada pengguna dengan tujuan untuk mencuri sesi pengguna yang telah diotentikasi. <br>
+    - [x] Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step (bukan hanya sekadar mengikuti tutorial). <br>
+        **Jawab:** <br>
+        Sudah dijelaskan di atas <br>
+- [x] Melakukan add-commit-push ke GitHub.
