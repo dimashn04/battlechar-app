@@ -45,7 +45,7 @@ def remove_operator(request, operator_id):
 def dec_secondary_ammo_amount(request, operator_id):
     if request.method == 'POST' and 'Decrement' in request.POST:
         operator = Operator.objects.get(id=operator_id)
-        operator.secondary_weapon_ammo_amount += 1
+        operator.secondary_weapon_ammo_amount -= 1
         operator.save()
     return HttpResponseRedirect(reverse('main:show_main'))
 
