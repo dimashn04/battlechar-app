@@ -866,7 +866,7 @@ Checklist untuk tugas ini adalah sebagai berikut: <br>
         ```
 
 **BONUS** <br>
-Special thanks To Fariz Zhafir Faza for teaching me on how to do this. <br>
+Special thanks To Faris Zhafir Faza for teaching me on how to do this. <br>
 - [x] Membuat dua akun pengguna dengan masing-masing tiga dummy data menggunakan model yang telah dibuat pada aplikasi sebelumnya untuk setiap akun di lokal. <br>
     ![hokum](/doks_md/hokum.png) <br>
     ![dhn](/doks_md/dhn.png) <br>
@@ -901,7 +901,7 @@ Special thanks To Fariz Zhafir Faza for teaching me on how to do this. <br>
         def dec_secondary_ammo_amount(request, operator_id):
             if request.method == 'POST' and 'Decrement' in request.POST:
                 operator = Operator.objects.get(id=operator_id)
-                operator.secondary_weapon_ammo_amount += 1
+                operator.secondary_weapon_ammo_amount -= 1
                 operator.save()
             return HttpResponseRedirect(reverse('main:show_main'))
         

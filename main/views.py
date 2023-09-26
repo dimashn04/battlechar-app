@@ -15,6 +15,7 @@ from main.models import Operator
 from django.http import HttpResponse
 from django.core import serializers
 
+# Special thanks to Faris Zhafir Faza for teaching me on how to do this.
 def add_primary_ammo_amount(request, operator_id):
     if request.method == 'POST' and 'Increment' in request.POST:
         operator = Operator.objects.get(id=operator_id)
