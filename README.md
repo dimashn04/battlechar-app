@@ -1066,3 +1066,426 @@ Special thanks To Faris Zhafir Faza for teaching me on how to do this. <br>
         **Jawab:** <br>
         Sudah dijelaskan di atas <br>
 - [x] Melakukan add-commit-push ke GitHub.
+
+# PBP Tugas 5
+## Checklist Tugas
+Checklist untuk tugas ini adalah sebagai berikut: <br>
+- [x] Kustomisasi desain pada templat HTML yang telah dibuat pada Tugas 4 dengan menggunakan CSS atau CSS framework (seperti Bootstrap, Tailwind, Bulma) dengan ketentuan sebagai berikut <br>
+    - Install tailwind: <br>
+        https://django-tailwind.readthedocs.io/en/latest/installation.html <br>
+    - [x] Kustomisasi halaman login, register, dan tambah inventori semenarik mungkin. <br>
+        - Memodifikasi dan menambahkan file-file HTML dengan styling. <br>
+            - ```templates\base.html``` <br>
+                ```html
+                {% load static tailwind_tags %}
+
+                <!DOCTYPE html>
+                <html lang="en">
+                    <head>
+                        <meta charset="UTF-8" />
+                        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+                        <meta
+                            name="viewport"
+                            content="width=device-width, initial-scale=1.0"
+                        />
+
+                        {% block meta %}
+                        {% endblock meta %}
+                        {% tailwind_css %}
+                    </head>
+
+                    <body class="bg-gray-500">
+                        <div>
+                            {% block content %}
+                            {% endblock content %}
+                        </div>
+                    </body>    
+                </html>
+                ```
+            - ```login.html``` <br>
+                ```html
+                {% extends 'base.html' %}
+
+                {% block meta %}
+                    <title>LOGIN</title>
+                {% endblock meta %}
+
+                {% block content %}
+
+                <div class="login">
+                    <form method="POST" action="">
+                        {% csrf_token %}
+                        <div class="flex justify-center items-center h-screen bg-gray-600">
+                            <div class="w-96 p-6 shadow-lg bg-white rounded-md">
+                                <h1 class="text-3xl block text-center font-semibold"><i class="fa-solid fa-user"></i> Login</h1>
+                                <hr class="mt-3">
+                                <div class="mt-3">
+                                    <label for="username" class="block text-base mb-2">Username</label>
+                                    <input type="text" name="username" class="border w-full text-base px-2 py-1 focus:outline-none focus:ring-0 focus:border-gray-600" placeholder="Enter Username..." />
+                                </div>
+                                <div class="mt-3">
+                                    <label for="password" class="block text-base mb-2">Password</label>
+                                    <input type="password" name="password" class="border w-full text-base px-2 py-1 focus:outline-none focus:ring-0 focus:border-gray-600" placeholder="Enter Password..." />
+                                </div>
+                                {% if messages %}
+                                    <ul class="mt-3">
+                                        {% for message in messages %}
+                                            <li class="text-red-600">{{ message }}</li>
+                                        {% endfor %}
+                                    </ul>
+                                {% endif %}
+                                <div class="mt-3 flex justify-between items-center">
+                                    <div>
+                                        <p>Don't have an account yet?</p>
+                                    </div>
+                                    <div>
+                                        <a href="{% url 'main:register' %}" class="text-blue-600 font-semibold">Register now!</a>
+                                    </div>
+                                </div>
+                                <div class="mt-5">
+                                    <button value="Login" type="submit" class="border-2 border-green-700 bg-green-700 text-white py-1 w-full rounded-md hover:bg-transparent hover:text-green-700 font-semibold"><i class="fa-solid fa-right-to-bracket"></i>&nbsp;&nbsp;Login</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                {% endblock content %}
+                ```
+            - ```register.html```
+                ```html
+                {% extends 'base.html' %}
+
+                {% block meta %}
+                    <title>REGISTER</title>
+                {% endblock meta %}
+
+                {% block content %}  
+
+                <div class="login">
+                    <form method="POST" action="">
+                        {% csrf_token %}
+                        <div class="flex justify-center items-center h-screen bg-gray-600">
+                            <div class="w-96 p-6 shadow-lg bg-white rounded-md">
+                                <h1 class="text-3xl block text-center font-semibold"><i class="fa-solid fa-user"></i> Register</h1>
+                                <hr class="mt-3">
+                                {% for field in form %}
+                                <div class="mt-3">
+                                    {% if field.errors %}
+                                    <ul class="block text-base mb-2 list-disc mt-3">
+                                        {% for error in field.errors %}
+                                        <li class="text-red-600">{{ error }}</li>
+                                        {% endfor %}
+                                    </ul>
+                                    {% endif %}
+                                    <p class="block text-base mb-2">{{ field.label_tag }}</p>
+                                    <p class="w-full text-base px-2 py-1 focus:outline-none focus:ring-0 focus:border-gray-600" >
+                                        {{ field }}
+                                    </p>
+                                </div>
+                                {% endfor %}
+                                {% if messages %}
+                                    <ul class="mt-3">
+                                        {% for message in messages %}
+                                            <li class="text-red-600">{{ message }}</li>
+                                        {% endfor %}
+                                    </ul>
+                                {% endif %}
+                                <div class="mt-3 flex justify-between items-center">
+                                    <div>
+                                        <p>Already have an account?</p>
+                                    </div>
+                                    <div>
+                                        <a href="{% url 'main:login' %}" class="text-blue-600 font-semibold">Login now!</a>
+                                    </div>
+                                </div>
+                                <div class="mt-5">
+                                    <button value="Login" type="submit" class="border-2 border-green-700 bg-green-700 text-white py-1 w-full rounded-md hover:bg-transparent hover:text-green-700 font-semibold"><i class="fa-solid fa-right-to-bracket"></i>&nbsp;&nbsp;Register</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                {% endblock content %}
+                ```
+            - ```navbar.html```
+                ```html
+                <header class="bg-gray-400">
+                <nav class="flex justify-between items-center w-[92%] mx-auto">
+                    <div>
+                        <img class="w-36 h-14 cursor-pointer mt-2 mb-2" src="https://cdn2.steamgriddb.com/file/sgdb-cdn/logo/90664f7d1cde0398e10c9466ef495b89.png" alt="...">
+                    </div>
+                    <div
+                        class="nav-links duration-500 md:static absolute md:min-h-fit min-h-[60vh] left-0 top-[-100%] md:w-auto  w-full flex items-center px-5">
+                        <ul class="flex md:flex-row flex-col md:items-center md:gap-[4vw] gap-8">
+                        </ul>
+                    </div>
+                    <div class="flex items-center gap-6">
+                        <a href="{% url 'main:logout' %}" class="bg-[#cc3f3f] text-white px-5 py-2 rounded-full hover:bg-[#ec8e87]">Logout</a>
+                    </div>
+                </header>
+                ```
+            - ```create_operator.html``` <br>
+                ```html
+                {% extends 'base.html' %}
+
+                {% block meta %}
+                    <title>CREATE OPERATOR</title>
+                {% endblock meta %}
+
+                {% block content %}
+                <div class="px-4 my-7 ml-7">
+                <h1 class="text-2xl font-bold font-sans mb-5">Add Operator</h1>
+
+                <form method="POST">
+                    {% csrf_token %}
+                    <table>
+                    {{ form.as_table }}
+                    <tr>
+                        <td></td>
+                        <td>
+                        <input class="bg-[#3870ff] text-white mt-5 px-5 py-2 rounded-full hover:bg-[#87aaec]" type="submit" value="Add Operator">
+                        </td>
+                    </tr>
+                    </table>
+                </form>
+                </div>
+
+                {% endblock %}
+                ```
+    - [x] Kustomisasi halaman daftar inventori menjadi lebih berwarna maupun menggunakan apporach lain seperti menggunakan Card. <br>
+        - Memodifikasi ```main.html``` dengan styling dan juga mengerjakan bonus. <br>
+            - ```main.html``` <br>
+                ```html
+                {% extends 'base.html' %}
+
+                {% block meta %}
+                    <title>ROSTER</title>
+                {% endblock meta %}
+
+                {% block content %}
+
+                {% include 'navbar.html' %}
+
+                {% comment %} Shout out to Faris Zhafir Faza for helping me {% endcomment %}
+                <div class="px-4 my-7 ml-7">
+                    <h1 class="text-2xl font-bold font-sans">Greetings Officer <span class="text-red-500">{{ creator }}</span> from {{ class }}!</h1>
+                    <div class="flex justify-between mt-4">
+                        {% if operators %}
+                        <h1 class="font-extrabold text-2xl text-black">Operator Roster</h1>
+                        {% else %}
+                        <h1 class="font-extrabold text-2xl text-black">Add Operator</h1>
+                        {% endif %}
+                        <a href="{% url 'main:create_operator' %}" class="flex w-fit justify-self-end text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm p-4 mr-2 mb-2 focus:outline-none">
+                            <button>
+                            Add New Operator
+                            </button>
+                        </a>
+                    </div>
+                    <div class="flex flex-wrap justify-center">
+                        {% for operator in operators %}
+                        <div class="w-[300px] m-4 h-[580px] p-6 {% if forloop.last %} bg-blue-200 {% else %}bg-white{% endif %} border border-gray-200 rounded-lg shadow-xl">
+                            <div class="flex justify-between">
+                                <h5 class="mb-2 text-xl font-bold tracking-tight text-gray-900 ">{{operator.name}}</h5>
+                                <form action="{% url 'main:remove_operator' operator.id %}" method="post">
+                                    {% csrf_token %}
+                                    <button type="submit" name="Remove" class="btn btn-danger focus:outline-none text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-2 py-1.5 mb-2">Delete</button>
+                                </form>
+                            </div>
+                            <p class="my-3 font-normal text-gray-700 ">{{operator.description}}</p>
+                            <div class="flex justify-between mt-2 mb-2">
+                                <p class="font-bold text-gray-900">{{operator.price}} renown</p>
+                            </div>
+                            <div class="flex justify-between mx-2 mt-2 mb-2">
+                                <a><center>{{ operator.primary_weapon_ammo_amount }} Primary Weapon Amount</center></a>
+                                <a><center>{{ operator.secondary_weapon_ammo_amount }} Secondary Weapon Amount</center></a>
+                            </div>
+                            <div class="flex justify-end mx-2 mt-2 mb-2">
+                                <form action="{% url 'main:add_primary_ammo_amount' operator.id %}" method="post">
+                                    {% csrf_token %}
+                                    <button type="submit" name="Increment" class="btn btn-primary text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-2 py-1.5 mr-2 mb-2 focus:outline-none">+ Primary</button>
+                                </form>
+                                <form action="{% url 'main:add_secondary_ammo_amount' operator.id %}" method="post">
+                                    {% csrf_token %}
+                                    <button type="submit" name="Increment" class="btn btn-primary text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-2 py-1.5 mr-2 mb-2 focus:outline-none">+ Secondary</button>
+                                </form>
+                            </div>
+                            <div class="flex justify-end mx-2 mt-2 mb-2">
+                                <form action="{% url 'main:dec_primary_ammo_amount' operator.id %}" method="post">
+                                    {% csrf_token %}
+                                    <button type="submit" name="Decrement" class="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-2 py-1.5 mr-2 mb-2">- Primary</button>
+                                </form>
+                                <form action="{% url 'main:dec_secondary_ammo_amount' operator.id %}" method="post">
+                                    {% csrf_token %}
+                                    <button type="submit" name="Decrement" class="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-2 py-1.5 mr-2 mb-2">- Secondary</button>
+                                </form>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                    
+                {% endblock content %}
+                ```
+- [x] Menjawab beberapa pertanyaan berikut pada ```README.md``` pada root folder (silakan modifikasi ```README.md``` yang telah kamu buat sebelumnya; tambahkan subjudul untuk setiap tugas). <br>
+    - [x] Jelaskan manfaat dari setiap element selector dan kapan waktu yang tepat untuk menggunakannya. <br>
+    **Jawab:** <br>
+        Element Selector: <br>
+        Element Selector memungkinkan kita mengubah properti untuk semua elemen yang memiliki tag HTML yang sama. <br>
+        Kita dapat menggunakan element sebagai selector dalam file CSS. Element selector menggunakan format [id_name] (tanpa diawali oleh sebuah simbol). <br>
+        Selektor elemen dalam CSS digunakan untuk memilih elemen di dalam elemen, yaitu menggabungkan dua selektor sehingga elemen yang cocok dengan selektor kedua akan dipilih jika elemen tersebut memiliki elemen leluhur yang cocok dengan selektor pertama. <br>
+
+        <br>
+        ID Selector: <br>
+        ID selector menggunakan ID pada tag sebagai selector-nya. ID bersifat unik dalam satu halaman web. ID dapat ditambahkan pada halaman template HTML. Kemudian, kita dapat menggunakan ID tersebut sebagai selector dalam file CSS. ID selector menggunakan format #[id_name] (selalu diawali #). <br>
+        Kita dapat menggunakan pemilih ID pada judul atau gambar, tombol, dan elemen HTML lainnya. <br>
+
+        <br>
+        Class Selector: <br>
+        Class Selector memungkinkan kita untuk mengelompokkan elemen dengan karakteristik yang sama. Kemudian, kita dapat menggunakan Class tersebut sebagai selector dalam file CSS. Kemudian, kita dapat menggunakan Class tersebut sebagai selector dalam file CSS. Class selector menggunakan format .[class_name] (diawali .) Class selector digunakan untuk memilih semua elemen yang termasuk dalam atribut kelas tertentu. <br><br>
+
+    - [x] Jelaskan HTML5 Tag yang kamu ketahui <br>
+    **Jawab:** <br>
+        ```<!--...-->```   Specifies a comment<br>
+        ```<!DOCTYPE>```   Specifies the document type<br>
+        ```<a>```   Specifies an anchor<br>
+        ```<abbr>```   Specifies an abbreviation<br>
+        ```<acronym>```   Deprecated:Specifies an acronym<br>
+        ```<address>```   Specifies an address element<br>
+        ```<applet>```   Deprecated: Specifies an applet<br>
+        ```<area>```   Specifies an area inside an image map<br>
+        ```<article>```   New Tag: Specifies an independent piece of content of a document, such as a blog entry or newspaper article<br>
+        ```<aside>```   New Tag:Specifies a piece of content that is only slightly related to the rest of the page.<br>
+        ```<audio>```   New Tag:Specifies an audio file.<br>
+        ```<base>```   Specifies a base URL for all the links in a page<br>
+        ```<basefont>```   Deprecated: Specifies a base font<br>
+        ```<bdo>```   Specifies the direction of text display<br>
+        ```<bgsound>```   Specifies the background music<br>
+        ```<blink>```   Specifies text which blinks<br>
+        ```<blockquote>```   Specifies a long quotation<br>
+        ```<body>```   Specifies the body element<br>
+        ```<br>```   Inserts a single line break<br>
+        ```<button>```   Specifies a push button<br>
+        ```<canvas>```   New Tag:This is used for rendering dynamic bitmap graphics on the fly, such as graphs or games.<br>
+        ```<caption>```   Specifies a table caption<br>
+        ```<center>```   Deprecated: Specifies centered text<br>
+        ```<col>```   Specifies attributes for table columns<br>
+        ```<colgroup>```   Specifies groups of table columns<br>
+        ```<command>```   New Tag:Specifies a command the user can invoke.<br>
+        ```<comment>```   Puts a comment in the document<br>
+        ```<datalist>```   New Tag:Together with the a new list attribute for input can be used to make comboboxes<br>
+        ```<dd>```   Specifies a definition description<br>
+        ```<del>```   Specifies deleted text<br>
+        ```<details>```   New Tag:Specifies additional information or controls which the user can obtain on demand.<br>
+        ```<dir>```   Deprecated: Specifies a directory list<br>
+        ```<div>```   Specifies a section in a document<br>
+        ```<dl>```   Specifies a definition list<br>
+        ```<dt>```   Specifies a definition term<br>
+        ```<embed>```   New Tag:Defines external interactive content or plugin.<br>
+        ```<fieldset>```   Specifies a fieldset<br>
+        ```<figure>```   New Tag:Specifies a piece of self-contained flow content, typically referenced as a single unit from the main flow of the document.<br>
+        ```<b>```   Specifies bold text<br>
+        ```<big>```   Deprecated:Specifies big text<br>
+        ```<i>```   Specifies italic text<br>
+        ```<small>```   Specifies small text<br>
+        ```<tt>```   Deprecated:Specifies teletype text<br>
+        ```<font>```   Deprecated: Specifies text font, size, and color<br>
+        ```<footer>```   New Tag:Specifies a footer for a section and can contain information about the author, copyright information, et cetera.<br>
+        ```<form>```  Specifies a form<br>
+        ```<frame>```   Deprecated:Specifies a sub window (a frame)<br>
+        ```<frameset>```   Deprecated:Specifies a set of frames<br>
+        ```<head>```   Specifies information about the document<br>
+        ```<header>```   New Tag:Specifies a group of introductory or navigational aids.<br>
+        ```<hgroup>```   New Tag:Specifies the header of a section.<br>
+        ```<h1>``` to ```<h6>```   Specifies header 1 to header 6<br>
+        ```<hr>```   Specifies a horizontal rule<br>
+        ```<html>```   Specifies an html document<br>
+        ```<isindex>```   Deprecated: Specifies a single-line input field<br>
+        ```<iframe>```   Specifies an inline sub window (frame)<br>
+        ```<ilayer>```   Specifies an inline layer<br>
+        ```<img>```   Specifies an image<br>
+        ```<input>```  Specifies an input field<br>
+        ```<ins>```   Specifies inserted text<br>
+        ```<keygen>```   New Tag:Specifies control for key pair generation.<br>
+        ```<keygen>```   Generate key information in a form<br>
+        ```<label>```   Specifies a label for a form control<br>
+        ```<layer>```   Specifies a layer<br>
+        ```<legend>```   Specifies a title in a fieldset<br>
+        ```<li>```   Specifies a list item<br>
+        ```<link>```   Specifies a resource reference<br>
+        ```<map>```   Specifies an image map<br>
+        ```<mark>```   New Tag:Specifies a run of text in one document marked or highlighted for reference purposes, due to its relevance in another context.<br>
+        ```<marquee>```   Create a scrolling-text marquee<br>
+        ```<menu>```   Deprecated: Specifies a menu list<br>
+        ```<meta>```   Specifies meta information<br>
+        ```<meter>```   New Tag:Specifies a measurement, such as disk usage.<br>
+        ```<multicol>```   Specifies a multicolumn text flow<br>
+        ```<nav>```   New Tag:Specifies a section of the document intended for navigation.<br>
+        ```<nobr>```   No breaks allowed in the enclosed text<br>
+        ```<noembed>```   Specifies content to be presented by browsers that do not support the <embed>tag<br>
+        ```<noframes>```   Deprecated:Specifies a noframe section<br>
+        ```<noscript>```   Specifies a noscript section<br>
+        ```<object>```   Specifies an embedded object<br>
+        ```<ol>```   Specifies an ordered list<br>
+        ```<optgroup>```   Specifies an option group<br>
+        ```<option>```   Specifies an option in a drop-down list<br>
+        ```<output>```   New Tag:Specifies some type of output, such as from a calculation done through scripting.<br>
+        ```<p>```   Specifies a paragraph<br>
+        ```<param>```   Specifies a parameter for an object<br>
+        ```<cite>```   Specifies a citation<br>
+        ```<code>```   Specifies computer code text<br>
+        ```<dfn>```   Specifies a definition term<br>
+        ```<em>```   Specifies emphasized text<br>
+        ```<kbd>```   Specifies keyboard text<br>
+        ```<samp>```   Specifies sample computer code<br>
+        ```<strong>```   Specifies strong text<br>
+        ```<var>```   Specifies a variable<br>
+        ```<plaintext>```   Deprecated: Render the remainder of the document as preformatted plain text<br>
+        ```<pre>```   Specifies preformatted text<br>
+        ```<progress>```   New Tag:Specifies a completion of a task, such as downloading or when performing a series of expensive operations.<br>
+        ```<q>```   Specifies a short quotation<br>
+        ```<ruby>```   New Tag:Together with ```<rt>``` and ```<rp>``` allow for marking up ruby annotations.<br>
+        ```<script>```   Specifies a script<br>
+        ```<section>```   New Tag:Represents a generic document or application section.<br>
+        ```<select>```   Specifies a selectable list<br>
+        ```<spacer>```   Specifies a white space<br>
+        ```<span>```   Specifies a section in a document<br>
+        ```<s>```   Deprecated: Specifies strikethrough text<br>
+        ```<strike>```   Deprecated: Specifies strikethrough text<br>
+        ```<style>```   Specifies a style definition<br>
+        ```<sub>```   Specifies subscripted text<br>
+        ```<sup>```   Specifies superscripted text<br>
+        ```<table>```   Specifies a table<br>
+        ```<tbody>```   Specifies a table body<br>
+        ```<td>```   Specifies a table cell<br>
+        ```<textarea>```   Specifies a text area<br>
+        ```<tfoot>```   Specifies a table footer<br>
+        ```<th>```   Specifies a table header<br>
+        ```<thead>```   Specifies a table header<br>
+        ```<time>```   New Tag:Specifies a date and/or time.<br>
+        ```<title>```   Specifies the document title<br>
+        ```<tr>```  Specifies a table row<br>
+        ```<u>```   Deprecated: Specifies underlined text<br>
+        ```<ul>```   Specifies an unordered list<br>
+        ```<video> ```  New Tag:Specifies a video file.<br>
+        ```<wbr>```   New Tag:Specifies a line break opportunity.<br>
+        ```<wbr>```   Indicate a potential word break point within a ```<nobr>``` section<br>
+        ```<xmp>```   Deprecated: Specifies preformatted text<br><br>
+    - [x] Jelaskan perbedaan antara margin dan padding. <br>
+    **Jawab:** <br>
+        Margin dan padding adalah dua properti dalam CSS yang digunakan untuk mengatur ruang di sekitar elemen HTML. Meskipun keduanya digunakan untuk mengatur tata letak elemen, mereka memiliki tujuan yang berbeda dan diterapkan dengan cara yang berbeda: <br>
+            1. **Margin** <br>
+                - Margin adalah ruang di luar elemen HTML, yang berarti ia mengontrol jarak antara elemen tersebut dan elemen-elemen lain di sekitarnya. <br>
+                - Margin digunakan untuk menciptakan ruang tambahan di luar elemen untuk mengatur jarak antara elemen tersebut dan elemen-elemen tetangganya, baik horizontal maupun vertikal. <br>
+                - Margin juga digunakan untuk mengatur pusat elemen di tengah halaman dengan menggunakan ```margin: auto;```. <br>
+            2. **Padding** <br>
+                - Padding adalah ruang di dalam elemen HTML, yang berarti ia mengontrol jarak antara konten elemen dan batas elemen tersebut. <br>
+                - Padding digunakan untuk memberikan ruang antara konten elemen dan batas elemen, sehingga tidak memengaruhi jarak antara elemen tersebut dan elemen-elemen lain di sekitarnya. <br>
+                - Padding sering digunakan untuk mengatur tampilan elemen dalam elemen kotak atau mengatur tampilan elemen teks. <br> <br>
+    - [x] Jelaskan perbedaan antara framework CSS Tailwind dan Bootstrap. Kapan sebaiknya kita menggunakan Bootstrap daripada Tailwind, dan sebaliknya? <br>
+    **Jawab:** <br>
+        Tailwind CSS dan Bootstrap adalah dua framework CSS yang berbeda dalam pendekatan dan gaya pengembangan. Bootstrap menyediakan sejumlah komponen siap pakai dengan desain yang sudah ditentukan, sementara Tailwind adalah alat yang lebih rendah tingkatnya, memungkinkan pengembang untuk menyesuaikan setiap gaya komponen secara langsung dalam kode HTML. Bootstrap cocok digunakan ketika kita perlu mengembangkan dengan cepat dan ingin desain yang konsisten tanpa banyak penyesuaian. Di sisi lain, Tailwind menjadi pilihan yang baik jika kita ingin total kontrol atas desain kita atau jika proyek kita memiliki tuntutan kustomisasi yang tinggi, meskipun ini dapat memerlukan lebih banyak waktu untuk mengimplementasikannya. <br><br>
+    - [x] Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step (bukan hanya sekadar mengikuti tutorial). <br>
+    **Jawab:** <br>
+    Sudah dijelaskan di atas. <br>

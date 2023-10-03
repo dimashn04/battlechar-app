@@ -6,29 +6,49 @@
 
 {% block content %}  
 
-<div class = "login">
-    
-    <h1>Register</h1>  
-
-        <form method="POST" >  
-            {% csrf_token %}  
-            <table>  
-                {{ form.as_table }}  
-                <tr>  
-                    <td></td>
-                    <td><input type="submit" name="submit" value="Daftar"/></td>  
-                </tr>  
-            </table>  
-        </form>
-
-    {% if messages %}  
-        <ul>   
-            {% for message in messages %}  
-                <li>{{ message }}</li>  
-                {% endfor %}  
-        </ul>   
-    {% endif %}
-
-</div>  
+<div class="login">
+    <form method="POST" action="">
+        {% csrf_token %}
+        <div class="flex justify-center items-center h-screen bg-gray-600">
+            <div class="w-96 p-6 shadow-lg bg-white rounded-md">
+                <h1 class="text-3xl block text-center font-semibold"><i class="fa-solid fa-user"></i> Register</h1>
+                <hr class="mt-3">
+                {% for field in form %}
+                <div class="mt-3">
+                    {% if field.errors %}
+                    <ul class="block text-base mb-2 list-disc mt-3">
+                        {% for error in field.errors %}
+                        <li class="text-red-600">{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                    {% endif %}
+                    <p class="block text-base mb-2">{{ field.label_tag }}</p>
+                    <p class="w-full text-base px-2 py-1 focus:outline-none focus:ring-0 focus:border-gray-600" >
+                        {{ field }}
+                    </p>
+                </div>
+                {% endfor %}
+                {% if messages %}
+                    <ul class="mt-3">
+                        {% for message in messages %}
+                            <li class="text-red-600">{{ message }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+                <div class="mt-3 flex justify-between items-center">
+                    <div>
+                        <p>Already have an account?</p>
+                    </div>
+                    <div>
+                        <a href="{% url 'main:login' %}" class="text-blue-600 font-semibold">Login now!</a>
+                    </div>
+                </div>
+                <div class="mt-5">
+                    <button value="Login" type="submit" class="border-2 border-green-700 bg-green-700 text-white py-1 w-full rounded-md hover:bg-transparent hover:text-green-700 font-semibold"><i class="fa-solid fa-right-to-bracket"></i>&nbsp;&nbsp;Register</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
 
 {% endblock content %}
