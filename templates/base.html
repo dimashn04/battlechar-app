@@ -3,16 +3,17 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
+        {% tailwind_css %}
+        {% block meta %}
         <meta charset="UTF-8" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta
             name="viewport"
             content="width=device-width, initial-scale=1.0"
         />
-
-        {% block meta %}
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha384-KyZXEAg3QhqLMpG8r+J4jsl5c9zdLKaUk5Ae5f5b1bw6AUn5f5v8FZJoMxm6f5cH1" crossorigin="anonymous"></script>
         {% endblock meta %}
-        {% tailwind_css %}
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.8.1/flowbite.min.css" rel="stylesheet" />
     </head>
 
     <body class="bg-gray-500">
@@ -20,5 +21,6 @@
             {% block content %}
             {% endblock content %}
         </div>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.8.1/flowbite.min.js"></script>
     </body>    
 </html>

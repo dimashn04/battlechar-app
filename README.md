@@ -1025,7 +1025,7 @@ Special thanks To Faris Zhafir Faza for teaching me on how to do this. <br>
 - [x] Menjawab beberapa pertanyaan berikut pada ```README.md``` pada root folder (silakan modifikasi ```README.md``` yang telah kamu buat sebelumnya; tambahkan subjudul untuk setiap tugas). <br>
     - [x] Apa itu ```Django UserCreationForm```, dan jelaskan apa kelebihan dan kekurangannya? <br>
         **Jawab:** <br>
-        UserCreationForm adalah impor formulir bawaan yang memudahkan pembuatan formulir pendaftaran pengguna dalam aplikasi web. Dengan formulir ini, pengguna baru dapat mendaftar dengan mudah di situs web Anda tanpa harus menulis kode dari awal. Salah satu kekurangan dari UserCreationForm adalah tidak memiliki field untuk Email. <br>
+        UserCreationForm adalah impor formulir bawaan yang memudahkan pembuatan formulir pendaftaran pengguna dalam aplikasi web. Dengan formulir ini, pengguna baru dapat mendaftar dengan mudah di situs web kita tanpa harus menulis kode dari awal. Salah satu kekurangan dari UserCreationForm adalah tidak memiliki field untuk Email. <br>
     - [x] Apa perbedaan antara autentikasi dan otorisasi dalam konteks Django, dan mengapa keduanya penting? <br>
         **Jawab:** <br>
         **Autentikasi:** <br>
@@ -1054,7 +1054,7 @@ Special thanks To Faris Zhafir Faza for teaching me on how to do this. <br>
         1. Membuat Session Cookies: Saat pengguna pertama kali mengakses situs web Django, server akan membuat cookie sesi baru dan mengirimkannya ke browser pengguna. Cookie ini berisi ID sesi unik yang terkait dengan sesi pengguna. <br>
         2. Menyimpan Data Sesuai ID Sesi: Data sesi pengguna disimpan di sisi server, bukan di cookie itu sendiri. Data ini seringkali berisi informasi seperti informasi login, preferensi pengguna, keranjang belanja, dan sebagainya. <br>
         3. Mengelola Data Sesuai ID Sesi: Setiap kali pengguna membuat permintaan ke situs web yang menggunakan sesi, Django akan mengidentifikasi pengguna berdasarkan ID sesi yang terkandung dalam cookie. Ini memungkinkan server untuk mengambil data sesi yang sesuai dari penyimpanan sesi dan membuatnya tersedia dalam kode aplikasi untuk penggunaan selanjutnya. <br>
-        4. Meng-update Data Sesuai Permintaan: Selama pengguna berinteraksi dengan situs web, data sesi dapat diperbarui atau diperluas sesuai dengan kebutuhan aplikasi. Django menyediakan API untuk menyimpan dan mengambil data sesi ini dalam kode aplikasi Anda. <br>
+        4. Meng-update Data Sesuai Permintaan: Selama pengguna berinteraksi dengan situs web, data sesi dapat diperbarui atau diperluas sesuai dengan kebutuhan aplikasi. Django menyediakan API untuk menyimpan dan mengambil data sesi ini dalam kode aplikasi kita. <br>
         5. Mengakhiri Sesuai Permintaan: Ketika sesi pengguna selesai (misalnya, pengguna keluar atau sesi kedaluwarsa), data sesi dapat dihapus dari penyimpanan sesi server, dan cookie sesi pada browser pengguna dapat dihapus. <br>
     - [x] Apakah penggunaan cookies aman secara default dalam pengembangan web, atau apakah ada risiko potensial yang harus diwaspadai? <br>
         **Jawab:** <br>
@@ -1489,3 +1489,309 @@ Checklist untuk tugas ini adalah sebagai berikut: <br>
     - [x] Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step (bukan hanya sekadar mengikuti tutorial). <br>
     **Jawab:** <br>
     Sudah dijelaskan di atas. <br>
+
+# PBP Tugas 6
+- Jelaskan perbedaan antara asynchronous programming dengan synchronous programming. <br>
+    **Jawab:** <br>
+    1. Synchronous Programming: <br>
+        - Dalam synchronous programming, tugas-tugas dieksekusi secara berurutan, satu per satu. Artinya, ketika satu tugas sedang berjalan, program akan menunggu hingga tugas tersebut selesai sebelum menjalankan tugas berikutnya. <br>
+        - Ini cocok untuk tugas-tugas yang cepat dan tidak memerlukan banyak waktu pemrosesan. <br>
+        - Jika ada tugas yang memerlukan waktu lama, seperti mengambil data dari database atau mengunduh file dari internet, maka program akan mengalami blocking, di mana program tidak akan merespons input atau menjalankan tugas lain sampai tugas yang sedang berlangsung selesai. <br>
+    2. Asynchronous Programming: <br>
+        - Dalam asynchronous programming, tugas-tugas dieksekusi secara bersamaan atau non-blokir. Artinya, program tidak harus menunggu tugas yang satu selesai sebelum menjalankan tugas lainnya. <br>
+        - Ini sangat berguna dalam situasi di mana ada banyak tugas yang memerlukan waktu lama atau menunggu sumber daya eksternal seperti jaringan atau database. <br>
+        - Untuk mengimplementasikan asynchronous programming, biasanya digunakan konsep seperti callback, promise, atau async/await dalam bahasa pemrograman seperti JavaScript. <br> <br>
+    Contoh perbedaannya dalam konteks web development: <br>
+        - **Synchronous**: Ketika seorang pengguna mengklik tombol untuk mengunduh file besar dari server, antarmuka pengguna akan membeku (freeze) sampai file tersebut selesai diunduh. Selama itu, pengguna tidak dapat berinteraksi dengan aplikasi. <br>
+        - **Asynchronous**: Dalam kasus yang sama, jika aplikasi web menggunakan asynchronous programming, pengguna masih dapat berinteraksi dengan antarmuka pengguna tanpa terpengaruh oleh proses pengunduhan. Proses pengunduhan akan berjalan di belakang layar, dan pengguna dapat melanjutkan berinteraksi dengan aplikasi tanpa adanya pembekuan antarmuka. <br><br>
+- Dalam penerapan JavaScript dan AJAX, terdapat penerapan paradigma event-driven programming. Jelaskan maksud dari paradigma tersebut dan sebutkan salah satu contoh penerapannya pada tugas ini. <br>
+    **Jawab:** <br>
+    Paradigma event-driven programming adalah salah satu pendekatan dalam pemrograman yang berfokus pada interaksi dan merespons kejadian atau peristiwa (events) yang terjadi dalam sistem atau aplikasi. Dalam konteks JavaScript dan AJAX (Asynchronous JavaScript and XML), paradigma ini sangat umum digunakan karena banyak tugas yang melibatkan interaksi dengan pengguna atau komunikasi dengan server web melalui asinkronus. <br> <br>
+    Maksud dari paradigma event-driven programming adalah sebagai berikut: <br>
+        1. **Berbasis Kejadian (Event-Based)**: Aplikasi yang dibangun dengan paradigma ini menunggu kejadian atau peristiwa tertentu untuk terjadi, seperti klik tombol, input pengguna, atau respons dari server, lalu meresponsnya dengan menjalankan kode yang sesuai. <br>
+        2. **Non-Blokir (Non-Blocking)**: Paradigma ini memungkinkan aplikasi untuk tetap merespons terhadap kejadian lainnya tanpa harus menunggu penyelesaian dari kejadian tertentu yang sedang berlangsung. Ini sangat berguna dalam situasi asinkronus seperti komunikasi dengan server. <br><br>
+    ```java
+    document.getElementById('load-button').addEventListener('click', function() {
+    // Kode yang akan dijalankan saat tombol "Muat Data" diklik
+    // Misalnya, mengirim permintaan AJAX ke server
+    });
+    ```
+- Jelaskan penerapan asynchronous programming pada AJAX. <br>
+    **Jawab:** <br>
+    Penerapan asynchronous programming pada AJAX (Asynchronous JavaScript and XML) adalah salah satu aspek fundamental dalam penggunaan AJAX dalam pengembangan web. Dalam konteks AJAX, asynchronous programming memungkinkan permintaan data ke server web dan pemrosesan respons server dilakukan secara non-blokir, sehingga halaman web tetap responsif dan tidak mengalami pembekuan saat menunggu respons dari server. Berikut adalah cara asynchronous programming diterapkan pada AJAX: <br>
+    1. **Menggunakan Objek XMLHttpRequest atau Fetch API:** <br>
+        - Biasanya, dalam asynchronous programming dengan AJAX, kita akan menggunakan objek XMLHttpRequest atau Fetch API (lebih modern) untuk mengirim permintaan ke server dan menerima respons. <br>
+        - Contoh penggunaan Fetch API dalam JavaScript modern: <br>
+            ```java
+            fetch('https://example.com/data')
+            .then(response => {
+                if (!response.ok) {
+                throw new Error('Terjadi kesalahan saat mengambil data.');
+                }
+                return response.json();
+            })
+            .then(data => {
+                // Lakukan sesuatu dengan data yang diterima dari server
+            })
+            .catch(error => {
+                // Tangani kesalahan jika ada
+            });
+            ```
+    2. **Menggunakan Callback, Promise, atau async/await:** <br>
+        - Biasanya, kita akan menggunakan callback, promise, atau async/await untuk menangani respons dari server dan menghindari pembekuan (blocking) antarmuka pengguna. <br>
+        - Contoh penggunaan promise dengan Fetch API: <br>
+            ```java
+            function fetchData() {
+            return fetch('https://example.com/data')
+                .then(response => {
+                if (!response.ok) {
+                    throw new Error('Terjadi kesalahan saat mengambil data.');
+                }
+                return response.json();
+                });
+            }
+
+            fetchData()
+            .then(data => {
+                // Lakukan sesuatu dengan data yang diterima dari server
+            })
+            .catch(error => {
+                // Tangani kesalahan jika ada
+            });
+            ```
+    3. **Menangani Respons Asynchronously:** <br>
+        - Dalam asynchronous programming, kode kita akan tetap melanjutkan eksekusi tanpa harus menunggu respons dari server. Ini memungkinkan interaksi pengguna dengan halaman web tetap lancar sementara data dari server diambil dan diproses secara asinkron. <br>
+        - Setelah respons dari server diterima, kita dapat memanipulasi DOM atau menjalankan tindakan lainnya sesuai dengan data yang diterima. <br><br>
+- Pada PBP kali ini, penerapan AJAX dilakukan dengan menggunakan Fetch API daripada library jQuery. Bandingkanlah kedua teknologi tersebut dan tuliskan pendapat kamu teknologi manakah yang lebih baik untuk digunakan. <br>
+    **Jawab:** <br>
+    Penerapan AJAX dengan menggunakan Fetch API dan jQuery adalah dua pendekatan yang berbeda dalam mengatasi permintaan asinkron ke server dalam pengembangan web. <br> <br>
+    **Fetch API:** <br>
+        1. **Native:** Fetch API adalah bagian dari standar JavaScript ECMAScript, yang berarti ia merupakan bagian bawaan dari bahasa JavaScript modern. Kita tidak perlu mengunduh atau memasang perpustakaan tambahan untuk menggunakannya. <br>
+        2. **Lebih Ringan:** Fetch API cenderung lebih ringan dibandingkan dengan jQuery. Ini dapat menghemat bandwidth dan memuat halaman lebih cepat karena tidak memerlukan penambahan perpustakaan eksternal. <br>
+        3. **Promises:** Fetch API menggunakan konsep promise, yang memungkinkan kita mengelola tugas asinkron dengan cara yang lebih bersih dan mudah dipahami. Ini membuat kode kita lebih mudah dibaca. <br>
+        4. **Fleksibilitas:** Fetch API memberikan kita lebih banyak fleksibilitas dalam mengelola permintaan dan respons HTTP, dan dapat berintegrasi dengan baik dengan teknologi terbaru seperti async/await. <br> <br>
+    **jQuerry:** <br>
+        1. **Kompatibilitas:** jQuery adalah perpustakaan yang telah ada sejak lama dan kompatibel dengan banyak browser yang lebih tua. Ini bisa bermanfaat jika kita harus mendukung browser lama. <br>
+        2. **Abstraksi yang Kuat:** jQuery menyediakan abstraksi yang kuat untuk AJAX, yang bisa membuat kode lebih pendek dan lebih mudah digunakan untuk tugas-tugas sederhana. <br>
+        3. Plugin Ekstensif: jQuery memiliki banyak plugin yang tersedia, termasuk plugin AJAX yang memperluas fungsionalitasnya. Ini bisa sangat berguna jika kita membutuhkan fitur-fitur khusus. <br> <br>
+    **Pendapat Pribadi:** <br>
+    - Jika kita mengembangkan aplikasi modern dan ingin memaksimalkan performa serta menghindari penggunaan perpustakaan eksternal yang tidak diperlukan, Fetch API adalah pilihan yang baik. Ini lebih ringan, lebih modern, dan lebih bersih dalam hal manajemen tugas asinkron. <br>
+    - Namun, jika kita bekerja dengan proyek yang harus mendukung browser lama atau ingin memanfaatkan abstraksi yang kuat dan plugin yang telah ada, maka menggunakan jQuery mungkin lebih sesuai. <br> <br>
+- Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step (bukan hanya sekadar mengikuti tutorial). <br>
+    **Jawab:** <br>
+    - AJAX GET
+        Membuang kode Card yang sebelumnya dibuat dan menambahkan ini sebagai penggantinya. <br>
+        ```html
+        <div id="operator_card" class="flex flex-wrap justify-center"></div>
+        ```
+        Menambahkan function untuk mendapatkan operator dalam bentuk json dalam views.py. <br>
+        ```python
+        def get_operator_json(request):
+            operator_item = Operator.objects.filter(user=request.user)
+            return HttpResponse(serializers.serialize('json', operator_item))
+        ```
+
+        Menambahkan URL function tersebut ke dalam urls.py. <br>
+        ```python
+        ...
+        path('get-operator/', get_operator_json, name='get_operator_json'),
+        ...
+        ```
+
+        Menambahkan script AJAX getter untuk mendapatkan operator. <br>
+        ```java
+        async function getOperators() {
+            return fetch("{% url 'main:get_operator_json' %}").then((res) => res.json())
+        }
+        ```
+
+        Menambahkan script AJAX untuk menampilkan operator-operator sekaligus refresh. <br>
+        ```java
+        async function refreshOperators() {
+            document.getElementById("operator_card").innerHTML = ""
+            const operators = await getOperators()
+            if(operators.length > 0){
+                messageText.textContent = "Operator Roster";
+            }else{
+                messageText.textContent = "Add Operator";
+            }
+            let htmlString = ``
+            operators.forEach((operator, index, array) => {
+                const isLastOperator = index === array.length - 1;
+                htmlString += `\n
+                <div id="operator_card" class="w-[300px] m-4 h-[580px] p-6 ${isLastOperator ? 'bg-blue-200' : 'bg-white'} border border-gray-200 rounded-lg shadow-xl">
+                    <div class="flex justify-between">
+                        <h5 class="mb-2 text-xl font-bold tracking-tight text-gray-900 ">${operator.fields.name}</h5>
+                        <a>
+                            <button type="submit" onclick="deleteOperator(${operator.pk}); return false;" class="btn btn-danger focus:outline-none text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-2 py-1.5 mb-2">Remove</button>
+                        </a>
+                    </div>
+                    <p class="my-3 font-normal text-gray-700 ">${operator.fields.description}</p>
+                    <div class="flex justify-between mt-2 mb-2">
+                        <p class="font-bold text-gray-900">${operator.fields.price} renown</p>
+                    </div>
+                    <div class="flex justify-between mx-2 mt-2 mb-2">
+                        <a><center>${operator.fields.primary_weapon} : ${operator.fields.primary_weapon_ammo_amount}</center></a>
+                        <a><center>${operator.fields.secondary_weapon} : ${operator.fields.secondary_weapon_ammo_amount}</center></a>
+                    </div>
+                    <div class="flex justify-end mx-2 mt-2 mb-2">
+                        <a href="/add-primary-ammo-amount/${operator.pk}">
+                            <button type="button" class="btn btn-primary text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-2 py-1.5 mr-2 mb-2 focus:outline-none">+ Primary</button>
+                        </a>
+                        <a href="/add-secondary-ammo-amount/${operator.pk}">
+                            <button type="button" class="btn btn-primary text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-2 py-1.5 mr-2 mb-2 focus:outline-none">+ Secondary</button>
+                        </a>
+                    </div>
+                    <div class="flex justify-end mx-2 mt-2 mb-2">
+                        <a href="/dec-primary-ammo-amount/${operator.pk}">
+                            <button type="button" class="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-2 py-1.5 mr-2 mb-2">- Primary</button>
+                        </a>
+                        <a href="/dec-secondary-ammo-amount/${operator.pk}">
+                            <button type="button" class="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-2 py-1.5 mr-2 mb-2">- Secondary</button>
+                        </a>
+                    </div>
+                </div>
+                ` 
+            })
+            document.getElementById("operator_card").innerHTML = htmlString
+        }
+
+        refreshOperators()
+        ```
+    - AJAX POST
+        Membuat modals form. <br>
+        ```html
+        <div id="modal" tabindex="-1" aria-hidden="true" class="fixed top-0 left-0 right-0 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full">
+            <div class="relative w-full max-w-md max-h-full">
+                <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+                    <button type="button" class="absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ml-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="modal">
+                        <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                        </svg>
+                        <span class="sr-only">Close</span>
+                    </button>
+                    <div class="px-6 py-6 lg:px-8">
+                        <h3 class="mb-4 text-xl font-medium text-gray-900 dark:text-white">Create operator</h3>
+                        <form class="space-y-6" id="form" onsubmit="return false;">
+                            {% csrf_token %}
+                            <div>
+                                <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Name</label>
+                                <input type="text" name="name" id="name" class="form-control border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 " placeholder="Operator" required>
+                            </div>
+                            <div>
+                                <label for="unit" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Unit</label>
+                                <input type="text" name="unit" id="unit" class="form-control border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 " placeholder="GSG-9" required>
+                            </div>
+                            <div>
+                                <label for="primary_weapon" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Primary Weapon</label>
+                                <input type="text" name="primary_weapon" id="primary_weapon" class="form-control border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 " placeholder="M4A1" required>
+                            </div>
+                            <div>
+                                <label for="primary_weapon_ammo_amount" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Primary Ammo</label>
+                                <input type="number" name="primary_weapon_ammo_amount" id="primary_weapon_ammo_amount" class="form-control bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 " placeholder="300" required>
+                            </div>
+                            <div>
+                                <label for="secondary_weapon" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Secondary Weapon</label>
+                                <input type="text" name="secondary_weapon" id="secondary_weapon" class="form-control border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 " placeholder="P12" required>
+                            </div>
+                            <div>
+                                <label for="secondary_weapon_ammo_amount" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Secondary Ammo</label>
+                                <input type="number" name="secondary_weapon_ammo_amount" id="secondary_weapon_ammo_amount" class="form-control bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 " placeholder="300" required>
+                            </div>
+                            <div>
+                                <label for="armor" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Armor</label>
+                                <input type="number" name="armor" id="armor" class="form-control bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 " placeholder="2" required>
+                            </div>
+                            <div>
+                                <label for="speed" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Speed</label>
+                                <input type="number" name="speed" id="speed" class="form-control bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 " placeholder="2" required>
+                            </div>
+                            <div>
+                                <label for="description" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Description</label>
+                                <textarea type="text" name="description" id="description" class="form-control border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 " placeholder="The operator is..." required></textarea>
+                            </div>
+                            <div>
+                                <label for="price" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Price</label>
+                                <input type="number" name="price" id="price" class="form-control bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 " placeholder="12500" required>
+                            </div>
+                            <button type="button" id="button_add" class="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center" data-modal-hide="modal">Add Operator</button>
+                            <button type="button" class="w-full text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center " data-modal-hide="modal">Cancel</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        ```
+
+        Mengubah button add operator untuk membuka modal form. <br>
+        ```html
+        <div class="flex justify-between" id="msgcontainer">
+            <h1 id="msgtext" class="font-extrabold text-2xl mt-3 text-black"></h1>
+            <div class="flex">
+                <a class="flex w-fit justify-self-end text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm p-4 mr-2 mb-2 focus:outline-none">
+                    <button data-modal-target="modal" data-modal-toggle="modal" type="button">
+                        Create operator
+                    </button>
+                </a>
+            </div>
+        </div>
+        ```
+
+        Membuat function add_operator_ajax di dalam views.py. <br>
+        ```python
+        @csrf_exempt
+        def add_operator_ajax(request):
+            if request.method == 'POST':
+                name = request.POST.get("name")
+                price = request.POST.get("price")
+                unit = request.POST.get("unit")
+                primary_weapon = request.POST.get("primary_weapon")
+                secondary_weapon = request.POST.get("secondary_weapon")
+                primary_weapon_ammo_amount = request.POST.get("primary_weapon_ammo_amount")
+                secondary_weapon_ammo_amount = request.POST.get("secondary_weapon_ammo_amount")
+                armor = request.POST.get("armor")
+                speed = request.POST.get("speed")
+                description = request.POST.get("description")
+                price = request.POST.get("price")
+                user = request.user
+
+                new_operator = Operator(name=name, 
+                                    price=price,
+                                    unit=unit,
+                                    primary_weapon=primary_weapon,
+                                    secondary_weapon=secondary_weapon,
+                                    primary_weapon_ammo_amount=primary_weapon_ammo_amount,
+                                    secondary_weapon_ammo_amount=secondary_weapon_ammo_amount,
+                                    armor=armor,
+                                    speed=speed,
+                                    description=description, 
+                                    user=user)
+                new_operator.save()
+
+                return HttpResponse(b"CREATED", status=201)
+
+            return HttpResponseNotFound()
+        ```
+
+        Menambahkan URL untuk add_operator_ajax dalam urls.py. <br>
+        ```python
+        ...
+        path('create-operator-ajax/', add_operator_ajax, name='add_operator_ajax'),
+        ...
+        ```
+
+        Membuat script AJAX untuk add operator. <br>
+        ```java
+        function addOperator() {
+            fetch("{% url 'main:add_operator_ajax' %}", {
+                method: "POST",
+                body: new FormData(document.querySelector('#form'))
+            }).then(() => {
+                refreshOperators();
+                updateRosterSize();})
+
+            document.getElementById("form").reset()
+            return false
+        }
+        ```
+    - Menjalankan ```python manage.py collectstatic```. Perintah ini bertujuan untuk mengumpulkan file static dari setiap aplikasi kamu ke dalam suatu folder yang dapat dengan mudah disajikan pada produksi. <br>
