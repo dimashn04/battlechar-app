@@ -1795,3 +1795,4 @@ Checklist untuk tugas ini adalah sebagai berikut: <br>
         }
         ```
     - Menjalankan ```python manage.py collectstatic```. Perintah ini bertujuan untuk mengumpulkan file static dari setiap aplikasi kamu ke dalam suatu folder yang dapat dengan mudah disajikan pada produksi. <br>
+    
