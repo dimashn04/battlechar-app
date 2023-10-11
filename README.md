@@ -1,6 +1,6 @@
 # PBP Tugas
 **BattleChar-App**<br>
-**Link:** https://battlechar.adaptable.app/main/ <br>
+**Link:** http://dimas-herjunodarpito-tugas.pbp.cs.ui.ac.id/ <br>
 Dimas Herjunodarpito Notoprayitno<br>
 2206081282<br>
 PBP C<br>
