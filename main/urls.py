@@ -1,8 +1,5 @@
 from django.urls import path
-from main.views import (add_operator_ajax, delete_operator_ajax, edit_operator, get_operator_json, show_html, show_json, show_json_by_id, show_main, create_operator, 
-                        show_xml, show_xml_by_id, register, login_user, logout_user,
-                        add_primary_ammo_amount, add_secondary_ammo_amount, dec_primary_ammo_amount,
-                        dec_secondary_ammo_amount, remove_operator)
+from main.views import *
 
 app_name = 'main'
 
@@ -26,4 +23,6 @@ urlpatterns = [
     path('create-operator-ajax/', add_operator_ajax, name='add_operator_ajax'),
     path('edit-operator/<int:id>', edit_operator, name='edit_operator'),
     path('delete-operator-ajax/<int:operator_id>/', delete_operator_ajax, name='delete_operator_ajax'),
+    path('create-flutter/', create_flutter, name='create_flutter'),
+    path('json-by-user/',show_json_by_user, name='show_json_by_user'),
 ]

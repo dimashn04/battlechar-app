@@ -1,6 +1,7 @@
+import json
 from django.views.decorators.csrf import csrf_exempt
 import datetime
-from django.http import HttpResponseNotFound, HttpResponseRedirect
+from django.http import HttpResponseNotFound, HttpResponseRedirect, JsonResponse
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
@@ -195,3 +196,31 @@ def delete_operator_ajax(request, operator_id):
         operator.delete()
         return HttpResponse(b"DELETED", status=201)
     return HttpResponseNotFound()
+
+@csrf_exempt
+def create_flutter(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+
+        new_op = Operator.objects.create(
+            user_id= int(data['user']),
+            name=data['name'],
+            price=int(data['price']),
+            primary_weapon=data['primary_weapon'],
+            secondary_weapon=data['secondary_weapon'],
+            primary_weapon_ammo_amount=int(data['primary_weapon_ammo_amount']),
+            secondary_weapon_ammo_amount=int(data['secondary_weapon_ammo_amount']),
+            armor=int(data['armor']),
+            speed=int(data['speed']),
+            description=data['description'],
+        )
+
+        new_op.save()
+
+        return JsonResponse({"status": "success"}, status=200)
+    else:
+        return JsonResponse({"status": "error"}, status=401)
+    
+def show_json_by_user(request):
+    data = Operator.objects.filter(user = request.user)
+    return HttpResponse(serializers.serialize("json", data), content_type="application/json")
