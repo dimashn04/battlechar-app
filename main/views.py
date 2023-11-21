@@ -203,7 +203,7 @@ def create_flutter(request):
         data = json.loads(request.body)
 
         new_op = Operator.objects.create(
-            user_id= int(data['user']),
+            user=request.user,
             name=data['name'],
             price=int(data['price']),
             primary_weapon=data['primary_weapon'],
@@ -213,6 +213,7 @@ def create_flutter(request):
             armor=int(data['armor']),
             speed=int(data['speed']),
             description=data['description'],
+            unit=data['unit']
         )
 
         new_op.save()
